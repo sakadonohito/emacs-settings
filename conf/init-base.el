@@ -1,0 +1,226 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; ファイル関係
+;; バックアップファイルを作らない
+(setq backup-inhibited t)
+(setq make-backup-files nil)
+
+;; 終了時にオートセーブファイルを消す
+(setq delete-auto-save-files t)
+
+;; 画像ファイルを表示する
+(auto-image-file-mode t)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 画面表示
+
+;; メニューバーを隠す
+(tool-bar-mode -1)
+
+;; 行数表示
+(line-number-mode t)
+
+;; 左側に行番号表示
+(require 'linum)
+(global-linum-mode t)
+(setq linum-format "%5d")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; ウィンドウ半透明ブームは終わったのでこの設定は使いません
+;; ウィンドウ設定
+;(if window-system (progn
+;  (set-background-color "Black")
+;  (set-foreground-color "LightGray")
+;  (set-cursor-color "VioletRed")
+;  (set-frame-parameter nil 'alpha 80)
+;))
+
+;; ウィンドウを透明化
+;(add-to-list 'default-frame-alist '(alpha . (0.75 0.75)))
+
+;; for Linux
+;(when (eq system-type 'gnu/linux)
+;  (setq default-frame-alist	
+;	(append (list
+;		 '(alpha . (70 100 100 100))
+;		 )
+;		default-frame-alist))
+;)
+;; for Windows
+;(when (eq system-type 'windows-nt)
+;  (setq default-frame-alist
+;	(append (list 
+;		 '(width . 100)
+;		 '(height . 36)
+;		 '(top . 10)
+;		 '(left . 20))
+;		default-frame-alist))
+;)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; 色々試したが挫折
+;; 背景色: アイボリー
+;(set-face-background 'default "#fdf6e3") ;#FDF6E3
+;; テキストカラー: 濃いグレー
+;(set-face-foreground 'default "#333333")
+;; キーワード: ソフトブルー
+;(set-face-foreground 'font-lock-keyword-face "#268BD2")
+;; コメント: グレイッシュグリーン
+;(set-face-foreground 'font-lock-comment-face "#874608") ;#93A1A1 / #667575 / #586e75
+;; カーソル: 穏やかな青色
+;(set-cursor-color "#176296") ;#268BD2
+;; 選択範囲: 淡い青
+;(set-face-background 'region "#E1F5FE")
+
+;;; 結局はコレ
+(if window-system
+    ;; GUI環境でのテーマ
+    (use-package solarized-theme
+      :ensure t
+      :config
+      (load-theme 'solarized-light t))
+  ;; ターミナル環境でのテーマ
+  (use-package solarized-theme
+    :ensure t
+    :config
+    (load-theme 'solarized-dark t)))
+
+;; デフォルトのフォントサイズを18pxに設定
+(set-face-attribute 'default nil :height 180)
+
+;; 起動時の画面はいらない
+(setq inhibit-startup-message t)
+
+;; 複数に画面分割している時にアクティブと他ので色を差別化
+(require 'dimmer)
+(dimmer-mode)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; カーソル色表示
+
+;; シンタックスハイライトの色付けをオン
+(global-font-lock-mode 1)
+
+;; color-identifiers-mode
+(add-hook 'after-init-hook 'global-color-identifiers-mode)
+
+;; rainbow delimiters
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; neotree
+;; 左サイドにファイルツリーを表示する
+(setq neo-theme 'ascii)
+(setq neo-persist-show t)
+(setq neo-smart-open t)
+(setq neo-show-hidden-files t)
+(setq neo-window-width 30)
+(global-set-key (kbd "M-o") 'neotree-toggle)
+;(global-set-key (kbd "C-c 3") 'neotree-toggle)
+(global-set-key (kbd "C-c d") 'make-directory)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 言語設定
+(set-language-environment 'Japanese)
+(prefer-coding-system 'utf-8)
+
+;; Mac OS X 10.9専用
+(when (and (eq window-system 'ns) (eq system-type 'darwin))
+
+;;日本語
+  (set-fontset-font
+   nil 'japanese-jisx0208
+   (font-spec :family "Hiragino Kaku Gothic ProN"));;font
+
+;; 半角と全角の比を1:2に
+  (setq face-font-rescale-alist
+	'((".*Hiragino_Mincho_pro.*" .1.2)))
+)
+
+;; for Windows
+(when (eq system-type 'windows-nt)
+  (set-face-font 'default "MS UI Gothic-14" ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 入力関係
+
+;;; タブキー/インデント
+(setq default-tab-width 4 indent-tab-mode nil)
+(setq indent-line-function 'indent-relative-maybe)
+
+;; Altがどの環境でもMetaキーになるように設定(ターミナルからだとEscがMetaキーになる場合あんねん)
+(setq ns-alt-modifier (quote meta))
+
+;;; キーバインド
+(global-set-key "\C-z" 'undo)
+(global-set-key "\C-h" 'delete-backward-char)
+
+;; redo
+(require 'redo+)
+(global-set-key (kbd "M-z") 'redo)
+
+;; 検索文字列のC-hで削除
+(define-key isearch-mode-map (kbd "C-h") 'isearch-del-char)
+
+;; バッファきりかえ
+(global-set-key (kbd "M-[") 'switch-to-prev-buffer)
+(global-set-key (kbd "M-]") 'switch-to-next-buffer)
+
+;; kill buffer のキーバインド変更
+(define-key global-map (kbd "C-x C-k") 'kill-buffer)
+
+
+;; ウィンドウの移動に関するキーバインド
+(global-set-key (kbd "C-c <left>") 'windmove-left)
+(global-set-key (kbd "C-c <down>") 'windmove-down)
+(global-set-key (kbd "C-c <up>") 'windmove-up)
+(global-set-key (kbd "C-c <right>") 'windmove-right)
+
+(defun other-window-or-split (val)
+  (interactive)
+  (when (one-window-p)
+    (split-window-horizontally) ;split horizontally
+    ;(split-window-vertically) ;split vertically
+  )
+  (other-window val))
+
+(global-set-key (kbd "<C-tab>") (lambda () (interactive) (other-window-or-split 1)))
+(global-set-key (kbd "<C-S-tab>") (lambda () (interactive) (other-window-or-split -1)))
+
+
+;;; 他入力編集
+;; 選択範囲を上書きペースト
+(delete-selection-mode t)
+
+;; visual-regexpに置き換え
+(autoload 'vr/query-replace "visual-regexp" "visual regexp" t)
+(global-set-key (kbd "M-%") 'vr/query-replace)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; sshの設定
+;; この設定の記述はここでよいのだろうか？
+(require 'tramp)
+(setq tramp-default-method "ssh")
+(add-to-list 'tramp-default-proxies-alist
+	     '(nil "\\`root\\'" "/ssh:%h:"))
+(add-to-list 'tramp-default-proxies-alist
+	     '("localhost" nil nil))
+(add-to-list 'tramp-default-proxies-alist
+	     '((regexp-quote (system-name)) nil nil))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

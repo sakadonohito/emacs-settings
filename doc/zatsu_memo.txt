@@ -1,0 +1,35 @@
+操作や仕様についてのメモ(少し使わないとすぐ忘れるから)
+
+追加した分だけ、評価する。
+M-x eval-region
+
+今、現在実行している全てのバッファの式を再評価する。
+M-x eval-buffer
+
+そもそもの設定ファイルを読み直す。
+M-x load-file RET ~/.emacs.d/init.el
+
+選択肢の中のファイルではなくてディレクトリを開きたいとき
+C-M-j
+
+;;;company
+;; 各種メジャーモードでも C-M-iで company-modeの補完を使う
+
+; neotree
+;(global-set-key "\M-o" 'neotree-toggle)
+;(global-set-key (kbd "C-c d") 'make-directory)
+
+その場でLisp実行と評価
+C-Shift-j
+
+;;; Git
+;; modifyされた箇所で実行すると、diffをinlineでみることができる
+(global-set-key (kbd "C-x C-v") 'git-gutter+-show-hunk-inline-at-point)
+
+;; バッファきりかえ
+(global-set-key (kbd "M-[") 'switch-to-prev-buffer)
+(global-set-key (kbd "M-]") 'switch-to-next-buffer)
+
+;; ウインドウ？の移動
+(global-set-key (kbd "<C-tab>") (lambda () (interactive) (other-window-or-split 1)))
+(global-set-key (kbd "<C-S-tab>") (lambda () (interactive) (other-window-or-split -1)))
