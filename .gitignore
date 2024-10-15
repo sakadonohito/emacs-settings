@@ -1,8 +1,8 @@
 .DS_Store
+.cache
 ac-comphist.dat
 auto-save-list/*
-elpa/*
-eshell/*
+
 recentf
 straight/*
 tramp
@@ -10,9 +10,14 @@ transient/*
 url/*
 
 gomibako/*
+zzz__kari_gomi
 bu/*
 !bu/.gitkeep
 
+elpa/*
+!elpa/.gitkeep
+eshell/*
+!eshell/.gitkeep
 elisp/*
 !elisp/.gitkeep
 site-lisp/*
@@ -25,8 +30,3 @@ public_repos
 codeium/*
 #!codeium/.gitkeep
 
-
-#分割設定ファイルの検証が終わるまで
-conf/*
-!conf/init-base.el
-!conf/init-shell.el

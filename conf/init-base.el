@@ -1,3 +1,9 @@
+;;; init-base.el --- Emacs initialization file
+;;; Commentary:
+;; このファイルは Emacs のGUIなどに関する初期設定ファイルです。
+;;; Code:
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; ファイル関係
 ;; バックアップファイルを作らない
@@ -17,6 +23,9 @@
 
 ;; メニューバーを隠す
 (tool-bar-mode -1)
+(push '(menu-bar-lines . 0) default-frame-alist)
+(push '(tool-bar-lines . 0) default-frame-alist)
+
 
 ;; 行数表示
 (line-number-mode t)
@@ -41,7 +50,7 @@
 
 ;; for Linux
 ;(when (eq system-type 'gnu/linux)
-;  (setq default-frame-alist	
+;  (setq default-frame-alist
 ;	(append (list
 ;		 '(alpha . (70 100 100 100))
 ;		 )
@@ -50,7 +59,7 @@
 ;; for Windows
 ;(when (eq system-type 'windows-nt)
 ;  (setq default-frame-alist
-;	(append (list 
+;	(append (list
 ;		 '(width . 100)
 ;		 '(height . 36)
 ;		 '(top . 10)
@@ -74,17 +83,25 @@
 ;(set-face-background 'region "#E1F5FE")
 
 ;;; 結局はコレ
-(if window-system
-    ;; GUI環境でのテーマ
-    (use-package solarized-theme
-      :ensure t
-      :config
-      (load-theme 'solarized-light t))
-  ;; ターミナル環境でのテーマ
-  (use-package solarized-theme
-    :ensure t
-    :config
-    (load-theme 'solarized-dark t)))
+(use-package solarized-theme
+  :straight t
+  :config
+  (if window-system
+      (load-theme 'solarized-light t) ;; GUI環境でのテーマ
+    (load-theme 'solarized-dark t)))  ;; ターミナル環境でのテーマ
+
+
+;(if window-system
+;    ;; GUI環境でのテーマ
+;    (use-package solarized-theme
+;      :ensure t
+;      :config
+;      (load-theme 'solarized-light t))
+;  ;; ターミナル環境でのテーマ
+;  (use-package solarized-theme
+;    :ensure t
+;    :config
+;    (load-theme 'solarized-dark t)))
 
 ;; デフォルトのフォントサイズを18pxに設定
 (set-face-attribute 'default nil :height 180)
@@ -93,8 +110,10 @@
 (setq inhibit-startup-message t)
 
 ;; 複数に画面分割している時にアクティブと他ので色を差別化
+;; dimmerをインストール
+(straight-use-package 'dimmer)
 (require 'dimmer)
-(dimmer-mode)
+(dimmer-mode t)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -106,10 +125,17 @@
 (global-font-lock-mode 1)
 
 ;; color-identifiers-mode
+(straight-use-package 'color-identifiers-mode)
+;; color-identifiers-mode を有効にする
+(with-eval-after-load 'color-identifiers-mode
+  (global-color-identifiers-mode t))
+
 (add-hook 'after-init-hook 'global-color-identifiers-mode)
 
 ;; rainbow delimiters
-(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+(straight-use-package 'rainbow-delimiters)
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+;(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -117,13 +143,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; neotree
 ;; 左サイドにファイルツリーを表示する
-(setq neo-theme 'ascii)
-(setq neo-persist-show t)
-(setq neo-smart-open t)
-(setq neo-show-hidden-files t)
-(setq neo-window-width 30)
+(use-package neotree
+  :straight t
+  :config
+  ;; neotree のカスタム設定
+  (setq neo-theme 'ascii)                    ;; ASCII 表示を使用
+  (setq neo-persist-show t)                  ;; neotree を常に表示
+  (setq neo-smart-open t)                    ;; 現在のファイルに基づいて自動的に neotree を開く
+  (setq neo-show-hidden-files t)             ;; 隠しファイルも表示
+  (setq neo-window-width 30)                 ;; neotree のウィンドウ幅を 30 に設定
+  )
+
 (global-set-key (kbd "M-o") 'neotree-toggle)
-;(global-set-key (kbd "C-c 3") 'neotree-toggle)
 (global-set-key (kbd "C-c d") 'make-directory)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -169,8 +200,13 @@
 (global-set-key "\C-h" 'delete-backward-char)
 
 ;; redo
+;; redo+ パッケージをインストール
+(straight-use-package
+ '(redo+ :type git :host github :repo "emacsmirror/redo-plus"))
+
 (require 'redo+)
-(global-set-key (kbd "M-z") 'redo)
+(global-set-key (kbd "C-S-z") 'redo)
+
 
 ;; 検索文字列のC-hで削除
 (define-key isearch-mode-map (kbd "C-h") 'isearch-del-char)
@@ -206,6 +242,11 @@
 (delete-selection-mode t)
 
 ;; visual-regexpに置き換え
+(use-package visual-regexp
+  :straight t
+  :bind
+  ("M-%" . vr/query-replace))  ;; M-% で visual-regexp を使う
+
 (autoload 'vr/query-replace "visual-regexp" "visual regexp" t)
 (global-set-key (kbd "M-%") 'vr/query-replace)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -224,3 +265,6 @@
 (add-to-list 'tramp-default-proxies-alist
 	     '((regexp-quote (system-name)) nil nil))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(provide 'init-base)
+;;; init-base.el ends here
