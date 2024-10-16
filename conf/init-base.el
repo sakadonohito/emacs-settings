@@ -106,6 +106,8 @@
 ;; デフォルトのフォントサイズを18pxに設定
 (set-face-attribute 'default nil :height 180)
 
+
+
 ;; 起動時の画面はいらない
 (setq inhibit-startup-message t)
 
@@ -166,8 +168,9 @@
 (prefer-coding-system 'utf-8)
 
 ;; Mac OS X 10.9専用
-(when (and (eq window-system 'ns) (eq system-type 'darwin))
-
+;(when (and (eq window-system 'ns) (eq system-type 'darwin))
+(when (and (eq window-system 'ns) (eq current-os IS-MAC))
+  
 ;;日本語
   (set-fontset-font
    nil 'japanese-jisx0208
@@ -179,7 +182,8 @@
 )
 
 ;; for Windows
-(when (eq system-type 'windows-nt)
+;(when (eq system-type 'windows-nt)
+(when (eq current-os IS-WINDOWS)
   (set-face-font 'default "MS UI Gothic-14" ))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -251,6 +255,60 @@
 (global-set-key (kbd "M-%") 'vr/query-replace)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 使い勝手
+;; yes-or-noをy-or-nに変更
+(setq use-short-answers t)
+
+;; 対応括弧を強調表示
+(use-package paren
+  :straight nil  ;; Emacs 組み込みの機能なのでインストールは不要
+  :init
+  (show-paren-mode +1))
+
+;; 自動的に括弧を閉じる
+(use-package elec-pair
+  :straight nil  ;; Emacs 組み込みの機能なのでインストールは不要
+  :init
+  (electric-pair-mode +1))
+
+;; 現在の行をハイライト
+(use-package hl-line
+  :straight nil  ;; Emacs 組み込みの機能なのでインストールは不要
+  :init
+  (global-hl-line-mode +1))
+
+;; 末尾の空白のみを強調表示
+(use-package whitespace
+  :straight nil  ;; Emacs 組み込みパッケージなのでインストールは不要
+  :custom
+  (whitespace-style '(face trailing))
+  :init
+  (global-whitespace-mode +1))
+
+;; インデントを可視化
+(use-package highlight-indent-guides
+  :straight t
+  :custom ((highlight-indent-guides-method 'character)
+           (highlight-indent-guides-character 124)
+           (highlight-indent-guides-responsive 'top))
+  :bind (nil
+         :map my-toggle-map
+	 ("i" . highlight-indent-guides-mode))
+  :hook ((prog-mode . highlight-indent-guides-mode)
+	 (text-mode . highlight-indent-guides-mode)))
+
+
+;; org-mode や markdown のテーブル機能で日本語が含まれてもずれないように
+(use-package valign
+  :straight t
+  :hook ((org-mode . valign-mode)
+         (markdown-mode . valign-mode)))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

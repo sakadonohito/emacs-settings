@@ -123,11 +123,26 @@ PATHS: List of directory paths to add to 'load-path'."
 ;;; 4.環境変数の設定
 ;; 環境がmacの場合、念の為環境変数を読み込ませる(本来は自動で読み込むがGUI版でうまく行かない場合がある？)
 
+;; OS判定処理と変数格納
+(defconst IS-MAC "MacOS")
+(defconst IS-LINUX "Linux")
+(defconst IS-WINDOWS "Windows")
+(defconst IS-UNKNOWN "Unknown OS")
+
+;; 起動したPCのOSを判定して、該当する文字列を保持する変数を定義
+(setq current-os
+      (cond
+       ((eq system-type 'darwin) IS-MAC)       ;; macOS
+       ((eq system-type 'gnu/linux) IS-LINUX)  ;; Linux
+       ((eq system-type 'windows-nt) IS-WINDOWS) ;; Windows
+       (t IS-UNKNOWN)))  ;; その他、未対応のOS
+
 ;; straight.elを使ってインストール
 (straight-use-package 'exec-path-from-shell)
 
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
