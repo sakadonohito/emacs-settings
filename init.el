@@ -165,7 +165,12 @@ PATHS: List of directory paths to add to 'load-path'."
 ;;; 7.Gitの設定
 
 ;; magit のインストール
-(straight-use-package 'magit)
+;(straight-use-package 'magit)
+;(use-package magit
+;  :straight t
+;  :config
+;  (global-git-commit-mode t))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

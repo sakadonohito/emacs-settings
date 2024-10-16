@@ -88,8 +88,8 @@
   :config
   (if window-system
       (load-theme 'solarized-light t) ;; GUI環境でのテーマ
-    (load-theme 'solarized-dark t)))  ;; ターミナル環境でのテーマ
-
+;;    (load-theme 'solarized-dark t)))  ;; ターミナル環境でのテーマ
+    ))
 
 ;(if window-system
 ;    ;; GUI環境でのテーマ
@@ -274,10 +274,15 @@
   (electric-pair-mode +1))
 
 ;; 現在の行をハイライト
-(use-package hl-line
-  :straight nil  ;; Emacs 組み込みの機能なのでインストールは不要
-  :init
-  (global-hl-line-mode +1))
+(if (window-system)
+
+    (use-package hl-line
+      :straight nil  ;; Emacs 組み込みの機能なのでインストールは不要
+      :init
+      (global-hl-line-mode +1))
+
+    )
+
 
 ;; 末尾の空白のみを強調表示
 (use-package whitespace
@@ -293,9 +298,9 @@
   :custom ((highlight-indent-guides-method 'character)
            (highlight-indent-guides-character 124)
            (highlight-indent-guides-responsive 'top))
-  :bind (nil
-         :map my-toggle-map
-	 ("i" . highlight-indent-guides-mode))
+;  :bind (nil
+;         :map my-toggle-map
+;	 ("i" . highlight-indent-guides-mode))
   :hook ((prog-mode . highlight-indent-guides-mode)
 	 (text-mode . highlight-indent-guides-mode)))
 
@@ -305,8 +310,6 @@
   :straight t
   :hook ((org-mode . valign-mode)
          (markdown-mode . valign-mode)))
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
