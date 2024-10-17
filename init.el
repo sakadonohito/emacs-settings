@@ -21,7 +21,7 @@
 ;; 	- Counsel
 ;;      - Flycheck
 ;; 	- Company
-;; 	- LSP
+;; 	- Eglot
 ;; 	- AI?
 ;; 9. 各プログラミング言語の設定
 ;;10. 自動で編集されるcustom-set-variables
@@ -120,7 +120,7 @@ PATHS: List of directory paths to add to 'load-path'."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 4.環境変数の設定
+;;; 4.環境変数の設定など
 ;; 環境がmacの場合、念の為環境変数を読み込ませる(本来は自動で読み込むがGUI版でうまく行かない場合がある？)
 
 ;; OS判定処理と変数格納
@@ -170,7 +170,6 @@ PATHS: List of directory paths to add to 'load-path'."
 ;  :straight t
 ;  :config
 ;  (global-git-commit-mode t))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -244,16 +243,18 @@ PATHS: List of directory paths to add to 'load-path'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 7-3.flycheck
 (use-package flycheck
-  :ensure t
-  :init (global-flycheck-mode))
-
-;(add-hook 'after-init-hook #'global-flycheck-mode)
-;; 自動起動
-(setq flycheck-check-syntax-automatically
-	  '(save idle-change mode-enabled))
-
-;; コード変更後、3秒後にチェックする
-(setq flycheck-idle-change-delay 3)
+  :straight t
+  :init (global-flycheck-mode)
+  :config
+  (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled) ;; 自動起動
+        flycheck-idle-change-delay 2.0)  ;; コード変更後のチェックを遅延を2秒に設定
+  ;; 特定モードで無効化(org, markdown)
+  (add-hook 'org-mode-hook (lambda () (flycheck-mode -1)))
+  (add-hook 'markdown-mode-hook (lambda () (flycheck-mode -1)))
+  ;; キーバインドを設定
+  (define-key flycheck-mode-map (kbd "C-c ! n") 'flycheck-next-error)
+  (define-key flycheck-mode-map (kbd "C-c ! p") 'flycheck-previous-error)
+  (define-key flycheck-mode-map (kbd "C-c ! l") 'flycheck-list-errors))
 
 ;; eslint 用の linter を登録
 ;(flycheck-add-mode 'javascript-eslint 'web-mode)
@@ -267,45 +268,31 @@ PATHS: List of directory paths to add to 'load-path'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 7-4.company
 (use-package company
+  :straight t
   :hook (after-init . global-company-mode)
   :config
-  (setq company-idle-delay 0.2
-        company-minimum-prefix-length 1
-        company-selection-wrap-around t)
+  (setq company-idle-delay 0.2                    ; 補完が表示されるまでの遅延時間
+        company-minimum-prefix-length 1            ; 補完が始まるまでの入力文字数
+        company-tooltip-align-annotations t        ; 右側を揃える
+        company-selection-wrap-around t)           ; 候補の一番下の次は一番上に戻る
 
-  (define-key company-active-map (kbd "C-n") 'company-select-next) ;; C-n, C-pで補完候補を次/前の候補を選択
+  ;; Eglotとの統合のため、company-backendsに'company-capfを設定
+  (setq company-backends '(company-capf))
+
+  ;; キーバインド設定
+  (define-key company-active-map (kbd "C-n") 'company-select-next)    ;; C-n, C-pで補完候補を次/前の候補を選択
   (define-key company-active-map (kbd "C-p") 'company-select-previous)
   (define-key company-search-map (kbd "C-n") 'company-select-next)
   (define-key company-search-map (kbd "C-p") 'company-select-previous)
-  (define-key company-active-map [tab] 'company-complete-selection) ;; TABで候補を設定
-  (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete) ;; 各種メジャーモードでも C-M-iで company-modeの補完を使う
+  (define-key company-active-map (kbd "C-s") 'company-filter-candidates) ;; C-sで絞り込む
+  (define-key company-active-map [tab] 'company-complete-selection)    ;; TABで候補を設定
+  (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete)     ;; 各種メジャーモードでも C-M-iで company-modeの補完を使う
   )
-;; LSPと連携するための設定
-(use-package company-lsp
-  :commands company-lsp
-  :config
-  (push 'company-lsp company-backends))
 
-
-;(require 'company)
-;(global-company-mode) ;全バッファで有効
-;(setq company-idle-delay 0.2) ;補完が表示されるまでの遅延時間
-;(setq company-minimum-prefix-length 1) ;補完が始まるまでの入力文字数
-;(setq company-selection-wrap-around t) ;候補の一番下の次は一番上に戻る
 
 (global-set-key (kbd "C-M-i") 'company-complete)
-; (define-key company-active-map (kbd "C-n") 'company-select-next) ;; C-n, C-pで補完候補を次/前の候補を選択
-; (define-key company-active-map (kbd "C-p") 'company-select-previous)
-; (define-key company-search-map (kbd "C-n") 'company-select-next)
-; (define-key company-search-map (kbd "C-p") 'company-select-previous)
-; ;(define-key company-active-map (kbd "C-s") 'company-filter-candidates) ;; C-sで絞り込む
-; ;(define-key company-active-map (kbd "C-i") 'company-complete-selection) ;; TABで候補を設定
-; (define-key company-active-map [tab] 'company-complete-selection) ;; TABで候補を設定
-; ;(define-key company-active-map (kbd "C-f") 'company-complete-selection) ;; C-fで候補を設定
-; (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete) ;; 各種メジャーモードでも C-M-iで company-modeの補完を使う
 
-
-;(setq company-tooltip-align-annotations t)
+;; 自分は使わない
 ;(setq company-show-quick-access t)  ;; 必要に応じて無効化
 ;(setq company-tooltip-flip-when-above nil)
 
@@ -313,125 +300,42 @@ PATHS: List of directory paths to add to 'load-path'."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 8-5.LSPの設定
-;; 基本的なlsp-mode設定
-(use-package lsp-mode
-  :ensure t
-  :commands (lsp lsp-deferred)
-  :hook ((python-mode . lsp-deferred)
-         (js-mode . lsp-deferred)
-         (typescript-mode . lsp-deferred)
-         (ruby-mode . lsp-deferred)
-         (perl-mode . lsp-deferred)
-         (php-mode . lsp-deferred)
-         (go-mode . lsp-deferred)
-         (rust-mode . lsp-deferred)
-         (fsharp-mode . lsp-deferred)
-         (csharp-mode . lsp-deferred)
-         (kotlin-mode . lsp-deferred)
-         (java-mode . lsp-deferred)
-         (erlang-mode . lsp-deferred)
-         (clojure-mode . lsp-deferred)
-	;(emacs-lisp-mode . lsp-deferred)
+;;; 8-5.Eglotの設定
+;; 基本的なEgloのt設定
+(use-package eglot
+  :straight t
+  :hook ((html-mode . eglot-ensure)
+         (css-mode . eglot-ensure)
+         (web-mode . eglot-ensure)
+	 (sh-mode . eglot-ensure)
+         (js-mode . eglot-ensure)
+         (typescript-mode . eglot-ensure)
+         (java-mode . eglot-ensure)
+         (kotlin-mode . eglot-ensure)
+         (php-mode . eglot-ensure)
+         (perl-mode . eglot-ensure)
+         (ruby-mode . eglot-ensure)
+         (python-mode . eglot-ensure)
+         (erlang-mode . eglot-ensure)
+         (go-mode . eglot-ensure)
+         (rust-mode . eglot-ensure)
+         (csharp-mode . eglot-ensure)
+         (fsharp-mode . eglot-ensure)
+         (clojure-mode . eglot-ensure)
 	 )
   :config
-  (setq lsp-prefer-flymake nil)) ;; flycheckを優先
+  ;; flymakeを無効にして、flycheckを使う
+  (add-hook 'eglot-managed-mode-hook (lambda () (flymake-mode -1))))
 
-;; LSP UIで補助機能を提供する
-;; flycheckとlsp-modeの統合
-(use-package lsp-ui
-  :ensure t
-  :commands lsp-ui-mode
-  :config
-  (setq lsp-ui-sideline-enable nil  ;; サイドラインにエラーを表示しない
-        lsp-ui-doc-enable t         ;; ドキュメントを表示
-        lsp-ui-flycheck-enable t))  ;; flycheckと連携してエラーを表示
+;; eldocの設定
+;(setq eldoc-echo-area-use-multiline-p nil)  ;; 複数行のエラーメッセージを無効化
 
-
-;; LSPのアイコン表示を強化
-(use-package lsp-ivy
-  :commands lsp-ivy-workspace-symbol)
-
-;; JavaScript/TypeScript用の設定
-(use-package lsp-mode
-  :hook ((js-mode . lsp)
-         (typescript-mode . lsp))
-  :config
-  (setq lsp-clients-typescript-server "tsserver"))
-
-;; Python用の設定
-(use-package lsp-mode
-  :hook (python-mode . lsp)
-  :config
-  (setq lsp-pylsp-server-command "pylsp"))
-
-;; Ruby用の設定
-(use-package lsp-mode
-  :hook (ruby-mode . lsp)
-  :config
-  (setq lsp-solargraph-use-bundler t)) ;; Bundlerを使用する場合
-
-;; Perl用の設定
-(use-package lsp-mode
-  :hook (perl-mode . lsp))
-
-;; PHP用の設定
-(use-package lsp-mode
-  :hook (php-mode . lsp)
-  :config
-  (setq lsp-intelephense-files-max-size 1000000))
-
-;; Go用の設定
-(use-package lsp-mode
-  :hook (go-mode . lsp)
-  :config
-  (setq lsp-gopls-staticcheck t)) ;; 静的解析を有効化
-
-;; Rust用の設定
-(use-package lsp-mode
-  :hook (rust-mode . lsp)
-  :config
-  (setq lsp-rust-server 'rust-analyzer))
-
-;; F#用の設定
-(use-package lsp-mode
-  :hook (fsharp-mode . lsp))
-
-;; C#用の設定
-(use-package lsp-mode
-  :hook (csharp-mode . lsp)
-  :config
-  (setq lsp-csharp-server-path "path/to/omnisharp"))
-
-;; Kotlin用の設定
-(use-package lsp-mode
-  :hook (kotlin-mode . lsp))
-
-;; Java用の設定
-(use-package lsp-mode
-  :hook (java-mode . lsp))
-
-;; Erlang用の設定
-(use-package lsp-mode
-  :hook (erlang-mode . lsp))
-
-;; Clojure用の設定
-(use-package lsp-mode
-  :hook (clojure-mode . lsp))
-
-;; Emacs Lisp用の設定（通常LSPは不要）
-;(add-hook 'emacs-lisp-mode-hook #'lsp-deferred)
-
-;; Common Lisp用の設定（SLIMEを使う場合）
-;(use-package slime
-;  :ensure t
-;  :config
-;  (setq inferior-lisp-program "/usr/local/bin/sbcl")) ;; 例: SBCLを使用
-
-(setq lsp-eldoc-render-all t)  ;; Eldocをすべて表示（ミニバッファでの表示）
-(setq lsp-ui-doc-enable nil)   ;; ツールチップでのドキュメント表示を無効化
-
-(setq lsp-eldoc-enable-hover nil)  ;; エラーメッセージをミニバッファで表示
+;; Ivyとの連携
+(use-package ivy-xref
+  :straight t
+  :init
+  ;; xrefのUIをivyに変更
+  (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -549,6 +453,9 @@ PATHS: List of directory paths to add to 'load-path'."
 ;;shell-pop
 (load "init-shell")
 
+;;org
+(load "init-org")
+
 ;;yaml
 (load "init-yaml")
 
@@ -563,7 +470,7 @@ PATHS: List of directory paths to add to 'load-path'."
 
 
 ;;web-mode
-;(load "init-html")
+(load "init-html")
 
 ;;javascript
 ;(load "init-js")
@@ -588,8 +495,7 @@ PATHS: List of directory paths to add to 'load-path'."
 ;;rst (Sphinx)
 ;(load "init-rst")
 
-;;org
-(load "init-org")
+
 
 ;;Elixir(Erlang beam)
 ;(load "init-elixir")
@@ -608,7 +514,7 @@ PATHS: List of directory paths to add to 'load-path'."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 10.自動で編集されるcustom-set-variables
-
+;; straight.elを利用しているので不要だが、straight.elをやめた時に備え残している
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

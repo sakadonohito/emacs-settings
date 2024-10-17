@@ -88,6 +88,7 @@
   :config
   (if window-system
       (load-theme 'solarized-light t) ;; GUI環境でのテーマ
+    ;;ターミナル環境は何もしないに変更
 ;;    (load-theme 'solarized-dark t)))  ;; ターミナル環境でのテーマ
     ))
 
@@ -103,7 +104,7 @@
 ;    :config
 ;    (load-theme 'solarized-dark t)))
 
-;; デフォルトのフォントサイズを18pxに設定
+;; デフォルトのフォントサイズを18pxに設定(程よく大きいほうが目が疲れない)
 (set-face-attribute 'default nil :height 180)
 
 
@@ -170,7 +171,7 @@
 ;; Mac OS X 10.9専用
 ;(when (and (eq window-system 'ns) (eq system-type 'darwin))
 (when (and (eq window-system 'ns) (eq current-os IS-MAC))
-  
+
 ;;日本語
   (set-fontset-font
    nil 'japanese-jisx0208
@@ -274,15 +275,14 @@
   (electric-pair-mode +1))
 
 ;; 現在の行をハイライト
-(if (window-system)
-
-    (use-package hl-line
-      :straight nil  ;; Emacs 組み込みの機能なのでインストールは不要
-      :init
-      (global-hl-line-mode +1))
-
-    )
-
+(use-package hl-line
+  :straight nil  ;; Emacs 組み込みの機能なのでインストールは不要
+  :init
+  (global-hl-line-mode +1)
+  :config
+  ;; ターミナル環境の時だけhl-lineの色を変更
+  (unless (display-graphic-p)
+    (set-face-background 'hl-line "#222222")))  ;; 暗い背景色
 
 ;; 末尾の空白のみを強調表示
 (use-package whitespace
