@@ -31,13 +31,25 @@
 (line-number-mode t)
 
 ;; 左側に行番号表示
-(require 'linum)
-(global-linum-mode t)
-(setq linum-format "%5d")
+(global-display-line-numbers-mode t)
+(setq display-line-numbers-width 5)  ;; 5桁分の幅を確保
+(setq display-line-numbers-format "%5d")  ;; 行番号を5桁で表示
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; ウィンドウ半透明ブームは終わったのでこの設定は使いません
-;; ウィンドウ設定
+;;; ウィンドウ設定
+;;
+;; 文字サイズの指定
+;; ウインドウの大きさに影響するので先に指定する
+;; デフォルトのフォントサイズを18pxに設定(程よく大きいほうが目が疲れない)
+(set-face-attribute 'default nil :height 180)
+
+(if window-system
+    ;; ウィンドウ幅を100文字分、ウィンドウ高さを40行分に設定
+    (add-to-list 'default-frame-alist '(width . 100))
+)
+
+;; ウィンドウ半透明ブームは終わったのでこの設定は使いません
 ;(if window-system (progn
 ;  (set-background-color "Black")
 ;  (set-foreground-color "LightGray")
@@ -66,8 +78,9 @@
 ;		 '(left . 20))
 ;		default-frame-alist))
 ;)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; テーマ
 ;;; 色々試したが挫折
 ;; 背景色: アイボリー
 ;(set-face-background 'default "#fdf6e3") ;#FDF6E3
@@ -103,10 +116,6 @@
 ;    :ensure t
 ;    :config
 ;    (load-theme 'solarized-dark t)))
-
-;; デフォルトのフォントサイズを18pxに設定(程よく大きいほうが目が疲れない)
-(set-face-attribute 'default nil :height 180)
-
 
 
 ;; 起動時の画面はいらない
