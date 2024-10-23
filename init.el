@@ -487,7 +487,7 @@ PATHS: List of directory paths to add to 'load-path'."
 ;(load "init-ruby")
 
 ;;python
-;(load "init-python")
+(load "init-python")
 
 ;;Groovy
 ;(load "init-groovy")

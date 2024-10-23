@@ -320,6 +320,8 @@
   :hook ((org-mode . valign-mode)
          (markdown-mode . valign-mode)))
 
+;(setq mac-pass-control-to-system nil)  ;; macOSのイベント処理をEmacs側で完全管理
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
