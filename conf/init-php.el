@@ -112,5 +112,8 @@
      ("\\$[a-zA-Z_][a-zA-Z0-9_]*\\>" . font-lock-variable-name-face) ;; 変数のハイライト
      ("->\\([a-zA-Z_][a-zA-Z0-9_]*\\)" 1 font-lock-function-name-face)))) ;; メソッド呼び出しのハイライト
 
+;; LSP server
+;; npm install -g intelephense
+
 (provide 'init-php)
 ;;; init-php.el ends here

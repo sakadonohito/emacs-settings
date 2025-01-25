@@ -14,5 +14,8 @@
   :mode ("\\.tf\\'" . terraform-mode)  ;; `.tf`拡張子でterraform-modeを有効化
   :hook (terraform-mode . eglot-ensure))  ;; terraform-modeでeglotを有効化
 
+;; LSP
+;; brew install terraform-ls
+
 (provide 'init-terraform)
 ;;; init-terraform.el ends here

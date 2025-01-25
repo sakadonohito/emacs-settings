@@ -37,5 +37,8 @@
            (highlight-indent-guides-character . 124)      ;; 縦線のキャラクターコード
            (highlight-indent-guides-auto-enabled . t)))   ;; 自動でガイドを有効化
 
+;; LSP server
+;; npm install -g pyright
+
 (provide 'init-python)
 ;;; init-python.el ends here

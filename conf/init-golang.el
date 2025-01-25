@@ -57,5 +57,8 @@
   (message "Go mode configured successfully"))
 
 
+;; LSP
+;; go install golang.org/x/tools/gopls@latest
+
 (provide 'init-golang)
 ;;; init-golang.el ends here

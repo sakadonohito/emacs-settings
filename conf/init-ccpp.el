@@ -4,6 +4,7 @@
 ;; 必要なパッケージのロードやカスタム設定が行われます。
 ;;; Code:
 
+;;C/C++
 (leaf cc-mode
   :custom ((c-default-style . "linux")   ;; Linuxカーネルスタイル
            (c-basic-offset . 4)          ;; インデント幅を4に設定

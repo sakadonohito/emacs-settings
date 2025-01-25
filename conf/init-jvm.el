@@ -32,5 +32,10 @@
   ;; 必要に応じてClojure固有の設定をここに記述できます
   )
 
+;; LSP
+;; Java: https://github.com/eclipse-jdtls/eclipse.jdt.ls
+;; Kotlin: brew install kotlin-language-server
+;; Clojure: brew install clojure-lsp
+
 (provide 'init-jvm)
 ;;; init-jvm.el ends here

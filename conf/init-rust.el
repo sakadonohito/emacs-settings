@@ -34,5 +34,11 @@
   ;; 必要に応じた追加の設定
   (message "Rust mode configured successfully!"))
 
+;; LSP他
+;; rustup component add rust-analyzer
+;; rustup component add rustfmt ;; フォーマットツール
+;; cargo
+
+
 (provide 'init-rust)
 ;;; init-rust.el ends here

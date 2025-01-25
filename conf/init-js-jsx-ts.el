@@ -29,5 +29,8 @@
   :custom ((typescript-ts-mode-indent-offset . 2))  ;; インデント幅を設定
   :hook (typescript-ts-mode . eglot-ensure))  ;; TypeScript用LSPを有効化
 
+;; LSP
+;; npm install -g typescript typescript-language-server
+
 (provide 'init-js-jsx-ts)
 ;;; init-js-jsx-ts.el ends here

@@ -12,8 +12,11 @@
 ;; leaf版
 (leaf dockerfile-mode
   :ensure t
-  :mode ("Dockerfile\\'"))  ;; "Dockerfile"という名前のファイルに適用
+  :mode ("Dockerfile\\'")  ;; "Dockerfile"という名前のファイルに適用
+  :hook (dockerfile-mode . eglot-ensure))  ;; LSPサーバーを有効化
 
+;; LSP
+;; npm install -g dockerfile-language-server-nodejs
 
 (provide 'init-docker)
 ;;; init-docker.el ends here

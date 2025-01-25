@@ -17,6 +17,9 @@
   :config
   (leaf shell-pop
     :ensure t
+    :mode (
+           ("\\.sh\\'" . sh-mode)    ;; sh
+           ("\\.zsh\\'" . sh-mode))    ;; zsh
     :custom ((shell-pop-shell-type . '("eshell" "*eshell*" (lambda () (eshell))))
              (shell-pop-window-size . 30)
              (shell-pop-full-span . nil))
@@ -26,6 +29,9 @@
     :hook (sh-mode . eglot-ensure)
     :custom ((sh-basic-offset . 2)
              (sh-indentation . 2))))
+
+;; LSP
+;; npm install -g bash-language-server
 
 (provide 'init-shell)
 ;;; init-shell.el ends here

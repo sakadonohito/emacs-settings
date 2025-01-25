@@ -29,6 +29,9 @@
   ;; 必要に応じた追加設定をここに記述
   )
 
+;; LSP
+;; C#: https://github.com/OmniSharp/omnisharp-roslyn
+;; F#: dotnet tool install --global fsautocomplete
 
 (provide 'init-ms)
 ;;; init-ms.el ends here

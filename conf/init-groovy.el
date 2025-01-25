@@ -16,5 +16,8 @@
   :config
   (global-font-lock-mode 1))  ;; 構文ハイライトを有効化
 
+;; LSP
+;; https://github.com/GroovyLanguageServer/groovy-language-server
+
 (provide 'init-groovy)
 ;;; init-groovy.el ends here

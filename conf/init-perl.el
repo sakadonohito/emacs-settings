@@ -60,5 +60,8 @@
      ("\\<%[a-zA-Z_][a-zA-Z0-9_]*\\>" . font-lock-variable-name-face)))) ;; ハッシュのハイライト
 
 
+;; LSP server
+;; cpanm Perl::LanguageServer
+
 (provide 'init-perl)
 ;;; init-perl.el ends here

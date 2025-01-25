@@ -39,5 +39,8 @@
   :config
   )
 
+;; LSP server
+;; gem install solargraph
+
 (provide 'init-ruby)
 ;;; init-ruby.el ends here

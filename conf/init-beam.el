@@ -49,5 +49,11 @@
   )
 
 
+;; LSP
+;; asdf plugin add erlang
+;; asdf install erlang <バージョン>
+;; asdf global erlang <バージョン>
+
+
 (provide 'init-beam)
 ;;; init-beam.el ends here
