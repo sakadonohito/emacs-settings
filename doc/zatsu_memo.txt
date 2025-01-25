@@ -23,8 +23,45 @@ C-M-j
 C-Shift-j
 
 ;;; Git
-;; modifyされた箇所で実行すると、diffをinlineでみることができる
-(global-set-key (kbd "C-x C-v") 'git-gutter+-show-hunk-inline-at-point)
+("C-x g" . magit-status)
+s	ファイルをステージ（git add）
+u	ステージを解除（git reset）
+c c	コミット作成（git commit）
+C-c C-c	コミットメッセージを確定
+P p	プッシュ（git push）
+F f	フェッチ（git fetch）
+l l	ログを表示（git log）
+b b	ブランチを切り替え
+m	ブランチのマージ（git merge）
+x	作業ディレクトリのクリーンアップ（git clean）
+q	終了
+
+("C-x M-g" . magit-dispatch)
+a	Apply: パッチを適用	git apply
+b	Branch: ブランチ操作	git branch, git checkout
+c	Commit: コミットの作成	git commit
+d	Diff: 差分の表示	git diff
+e	Ediff: 差分をEdiffで表示	Emacs内で差分をインタラクティブ表示
+f	Fetch: フェッチ操作	git fetch
+l	Log: コミットログを表示	git log
+m	Merge: マージ操作	git merge
+p	Push: プッシュ操作	git push
+r	Rebase: リベース操作	git rebase
+t	Tag: タグの操作	git tag
+x	Reset: リセット操作	git reset
+y	Show Refs: 参照を表示	git show-ref
+z	Stash: 一時保存	git stash
+!	Run: 任意のGitコマンドを実行	任意のGitコマンド
+?	Help: ヘルプを表示	Magitのドキュメント表示
+
+;; 履歴を参照できる
+("C-x t" . git-timemachine)
+p: 前のコミットに移動（previous）
+n: 次のコミットに移動（next）
+q: タイムマシンモードを終了（quit）
+w: 現在のコミットのハッシュをコピー（write）
+b: 現在のコミットのブランチをコピー（branch）
+g: 特定のコミットIDにジャンプ（goto）
 
 ;; バッファきりかえ
 (global-set-key (kbd "M-[") 'switch-to-prev-buffer)
@@ -33,3 +70,10 @@ C-Shift-j
 ;; ウインドウ？の移動
 (global-set-key (kbd "<C-tab>") (lambda () (interactive) (other-window-or-split 1)))
 (global-set-key (kbd "<C-S-tab>") (lambda () (interactive) (other-window-or-split -1)))
+
+;;; ivy
+C-x C-f で新規ファイルや別名保存の際にivyの補完が効きすぎて新規ファイル名を包含する既存ファイル名に勝手に置換してしまう場合は
+C-M-j で確定することによって回避できる。 ※地味に重要！！！
+
+;;; 複数のバッファ閉じる
+M-x ibuffer でバッファリストが出るのでそこで閉じたいバッファを選択(mキー)、その後D(Shift + d)で閉じる。

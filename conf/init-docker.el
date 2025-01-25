@@ -5,8 +5,15 @@
 ;;; Code:
 
 ;; dockerfile-mode の導入
-(use-package dockerfile-mode
-  :straight t
-  :mode "Dockerfile\\'")
+;(use-package dockerfile-mode
+;  :straight t
+;  :mode "Dockerfile\\'")
 
+;; leaf版
+(leaf dockerfile-mode
+  :ensure t
+  :mode ("Dockerfile\\'"))  ;; "Dockerfile"という名前のファイルに適用
+
+
+(provide 'init-docker)
 ;;; init-docker.el ends here
