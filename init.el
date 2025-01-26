@@ -92,12 +92,24 @@
 ;;; 1-3.leafの設定
 ;; leafのインストールとブートストラップコード
 (eval-and-compile
+  ;; パッケージアーカイブを設定
   (customize-set-variable
    'package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                        ("melpa" . "https://melpa.org/packages/")))
+
+  ;; パッケージの初期化
   (package-initialize)
+
+  ;; パッケージリストを更新（必要に応じてコメントアウト可）
+  (unless package-archive-contents
+    (package-refresh-contents))
+
+  ;; leaf をインストール
+  (unless (package-installed-p 'leaf)
+    (package-install 'leaf))
   (use-package leaf :ensure t)
 
+  ;; leaf-keywords をインストール
   (leaf leaf-keywords
     :ensure t
     :init
@@ -105,15 +117,6 @@
     :config
     (leaf-keywords-init)))
 
-;(unless (package-installed-p 'leaf)
-;  (package-refresh-contents)
-;  (package-install 'leaf))
-
-;; leaf-keywordsの設定（記法の拡張）
-;(leaf leaf-keywords
-;  :ensure t
-;  :config
-;  (leaf-keywords-init))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -533,11 +536,14 @@ PATHS: List of directory paths to add to 'load-path'."
 ;; Corfuの設定
 (leaf corfu
   :ensure t
+  :init
+  (global-corfu-mode)
+  (setq corfu-auto t                   ;; 自動補完を有効化
+        corfu-auto-delay 0.1           ;; 自動補完の遅延
+        corfu-auto-prefix 1)           ;; 補完を始める文字数
   :hook (prog-mode . corfu-mode)
   :custom
-  ((corfu-auto . t)                   ;; 自動補完を有効化
-   (corfu-auto-delay . 0.1)           ;; 自動補完の遅延
-   (corfu-cycle . t))                 ;; 候補を循環
+  ((corfu-cycle . t))                 ;; 候補を循環
   :config
   ;; ミニバッファではCorfuを無効化
   (add-hook 'minibuffer-setup-hook
@@ -554,108 +560,47 @@ PATHS: List of directory paths to add to 'load-path'."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 実験: Codeium API (コード生成AI)
-;(require 'request)
-;
-;(defvar codeium-api-key "your-api-key-here"
-;  "Codeium API key.")
-;
-;(defun codeium-get-completion (prompt)
-;  "Send a completion request to Codeium API with PROMPT."
-;  (interactive "sPrompt: ")
-;  (let ((url "https://api.codeium.com/v1/completions")
-;        (data (json-encode `(("model" . "code-completion-model")
-;                             ("prompt" . ,prompt)
-;                             ("max_tokens" . 100)))))
-;    (request
-;     url
-;     :type "POST"
-;     :headers `(("Content-Type" . "application/json")
-;                ("Authorization" . ,(concat "Bearer " codeium-api-key)))
-;     :data data
-;     :parser 'json-read
-;     :success (cl-function
-;               (lambda (&key data &allow-other-keys)
-;                 (let ((completion (assoc-default 'text (aref (assoc-default 'choices data) 0))))
-;                   (insert completion))))))))
-;
-;;; 実験: Codeium API (コード生成AI) company連携
-;(defun company-codeium-backend (command &optional arg &rest ignored)
-;  "Codeium backend for company-mode."
-;  (interactive (list 'interactive))
-;  (cl-case command
-;    (interactive (company-begin-backend 'company-codeium-backend))
-;    (prefix (company-grab-symbol))
-;    (candidates
-;     (let ((prompt arg)
-;           (completions nil))
-;       (codeium-get-completion prompt)
-;       completions))))
-;
-;(add-to-list 'company-backends 'company-codeium-backend)
-;(global-set-key (kbd "C-c C-o") 'codeium-get-completion)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(leaf codeium
+  ;; MELPAに登録されていない
+  ;:ensure t
+  ;; :vcキーワードが使えない
+  ;:vc ( :url "https://github.com/Exafunction/codeium.el"
+  ;      :lisp-dir "elisp")
+  :require t
+  :init
+  ;; 補完機能を追加
+  ;; completion-at-point-functions に codeium-completion-at-point を追加
+  (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
+  ;; 起動時に Codeium を初期化（オプション）
+  (add-hook 'emacs-startup-hook
+            (lambda () (run-with-timer 0.1 nil #'codeium-init)))
+  :config
+  ;; ポップアップダイアログを使用しない
+  (setq use-dialog-box nil)
+  ;; モードラインに Codeium のステータスを表示
+  (setq codeium-mode-line-enable
+        (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
+  (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
+  ;; 有効な API を制限
+  (setq codeium-api-enabled
+        (lambda (api)
+          (memq api '(GetCompletions Heartbeat CancelRequest GetAuthToken RegisterUser auth-redirect AcceptCompletion))))
+  ;; パフォーマンス向上のために送信文字列を制限
+  (defun my-codeium/document/text ()
+    (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (min (+ (point) 1000) (point-max))))
+  (defun my-codeium/document/cursor_offset ()
+    (codeium-utf8-byte-length
+     (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
+  (setq codeium/document/text 'my-codeium/document/text)
+  (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset)
 
+  ;; 必要な初期セットアップを実行(導入後1回手動で実行すればよい。設定の中にある必要はない)
+  ;(codeium-install)
+  )
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 8-6.Codeiumの設定
-;; we recommend using use-package to organize your init.el
-;(use-package codeium
-;  :straight (:type git :host github :repo "Exafunction/codeium.el")
-;  :init
-;  ;; use globally
-;  (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
-;  ;; or on a hook
-;  ;; (add-hook 'python-mode-hook
-;  ;;     (lambda ()
-;  ;;         (setq-local completion-at-point-functions '(codeium-completion-at-point))))
-;
-;  ;; if you want multiple completion backends, use cape (https://github.com/minad/cape):
-;  ;; (add-hook 'python-mode-hook
-;  ;;     (lambda ()
-;  ;;         (setq-local completion-at-point-functions
-;  ;;             (list (cape-super-capf #'codeium-completion-at-point #'lsp-completion-at-point)))))
-;  ;; an async company-backend is coming soon!
-;
-;  ;; codeium-completion-at-point is autoloaded, but you can
-;  ;; optionally set a timer, which might speed up things as the
-;  ;; codeium local language server takes ~0.2s to start up
-;  ;; (add-hook 'emacs-startup-hook
-;  ;;  (lambda () (run-with-timer 0.1 nil #'codeium-init)))
-;
-;  ;; :defer t ;; lazy loading, if you want
-;  :config
-;  (setq use-dialog-box nil) ;; do not use popup boxes
-;
-;  ;; if you don't want to use customize to save the api-key
-;  ;; (setq codeium/metadata/api_key "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
-;
-;  ;; get codeium status in the modeline
-;  (setq codeium-mode-line-enable
-;        (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
-;  (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
-;  ;; alternatively for a more extensive mode-line
-;  ;; (add-to-list 'mode-line-format '(-50 "" codeium-mode-line) t)
-;
-;  ;; use M-x codeium-diagnose to see apis/fields that would be sent to the local language server
-;  (setq codeium-api-enabled
-;        (lambda (api)
-;          (memq api '(GetCompletions Heartbeat CancelRequest GetAuthToken RegisterUser auth-redirect AcceptCompletion))))
-;  ;; you can also set a config for a single buffer like this:
-;  ;; (add-hook 'python-mode-hook
-;  ;;     (lambda ()
-;  ;;         (setq-local codeium/editor_options/tab_size 4)))
-;
-;  ;; You can overwrite all the codeium configs!
-;  ;; for example, we recommend limiting the string sent to codeium for better performance
-;  (defun my-codeium/document/text ()
-;    (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (min (+ (point) 1000) (point-max))))
-;  ;; if you change the text, you should also change the cursor_offset
-;  ;; warning: this is measured by UTF-8 encoded bytes
-;  (defun my-codeium/document/cursor_offset ()
-;    (codeium-utf8-byte-length
-;     (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
-;  (setq codeium/document/text 'my-codeium/document/text)
-;  (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset))
+;; 必要に応じて API キーを設定
+;; (setq codeium-api-key "YOUR_CODEIUM_API_KEY")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -743,6 +688,7 @@ PATHS: List of directory paths to add to 'load-path'."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(codeium/metadata/api_key "2699fb82-d815-443d-8b8e-709ed2e72d60")
  '(package-selected-packages
    '(valign solarized-theme rainbow-delimiters magit leaf-keywords flycheck diff-hl blackout)))
 (custom-set-faces

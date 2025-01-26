@@ -18,8 +18,9 @@ elpa/*
 !elpa/.gitkeep
 eshell/*
 !eshell/.gitkeep
-elisp/*
-!elisp/.gitkeep
+#elisp/*
+#!elisp/.gitkeep
+
 site-lisp/*
 !site-lisp/.gitkeep
 

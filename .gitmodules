@@ -1,0 +1,3 @@
+[submodule "elisp/Exafunction/codeium.el"]
+	path = elisp/Exafunction/codeium.el
+	url = https://github.com/Exafunction/codeium.el.git
