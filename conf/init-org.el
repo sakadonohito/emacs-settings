@@ -3,12 +3,6 @@
 ;; このファイルは org-modeの設定ファイルです
 ;;; Code:
 
-;(use-package org
-;  :straight t)
-;; 横スクロールさせず折り返し表示にする
-;(setq org-startup-truncated nil)
-;(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
-
 (leaf org
   :ensure t
   :custom

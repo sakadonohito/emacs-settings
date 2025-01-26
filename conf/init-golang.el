@@ -4,38 +4,6 @@
 ;; 必要なパッケージのロードやカスタム設定が行われます。
 ;;; Code:
 
-;;require package
-;(require 'go-mode)
-;(with-eval-after-load 'go-mode
-;  ;; autocomplete
-;  (require 'go-autocomplete)
-;  ;;company-mode
-;  (add-to-list 'company-backends 'company-go)
-;
-;  ;; eldoc
-;  (add-hook 'go-mode-hook 'go-eldoc-setup)
-;
-;  ;; key bindings
-;  (define-key go-mode-map (kbd "M-.") 'godef-jump)
-;  (define-key go-mode-map (kbd "M-,") 'pop-tag-mark)
-;
-;  (add-hook 'go-mode-hook (lambda()
-;							(setq indent-tabs-mode nil) ;use tab
-;							(setq tab-width 2))))
-
-
-;;other settings
-;(add-hook 'go-mode-hook 'company-mode)
-;(add-hook 'go-mode-hool 'flycheck-mode)
-;(add-hook 'go-mode-hook (lambda()
-;						  (add-hook 'before-save-hook' 'gofmt-before-save)
-;						  (local-set-key (kbd "M-.") 'godef-jump)
-;						  (set (make-local-variable 'company-backends) '(company-go))
-;						  (company-mode)
-;						  (setq indent-tabs-mode nil) ;use tab
-;						  (setq tab-width 2)))
-
-
 (leaf go-mode
   :ensure t
   :mode ("\\.go\\'" . go-mode)  ;; Goファイルに対応

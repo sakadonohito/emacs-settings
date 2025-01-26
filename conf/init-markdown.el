@@ -4,13 +4,6 @@
 ;; 必要なパッケージのロードやカスタム設定が行われます。
 ;;; Code:
 
-;; markdown-mode の導入
-;(use-package markdown-mode
-;  :straight t
-;  :mode "\\.md\\'"
-;  :init
-;  (setq markdown-command "multimarkdown"))
-
 (leaf markdown-mode
   :ensure t
   :mode (("\\.md*\\'" . markdown-mode)  ;; `.md`拡張子でmarkdown-modeを有効化

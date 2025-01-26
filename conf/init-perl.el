@@ -3,38 +3,6 @@
 ;; このファイルは perl-modeの設定ファイルです
 ;;; Code:
 
-
-;;perl-modeをcperl-modeのエイリアスにする
-;(defalias 'perl-mode 'cperl-mode)
-
-;;cperl-modeのインデント設定
-;(setq cperl-indent-level 4 ;インデント幅を4にする
-;	  cperl-continued-statement-offset 4 ;継続する文のオフセット
-;	  cperl-brace-offset -4 ;ブレースのオフセット
-;	  cperl-label-offset -4 ;labelのオフセット
-;	  cperl-indent-parens-as-block t ;括弧もブロックとしてインデント
-;	  cperl-close-paren-offset -4 ;閉じ括弧のオフセット
-;	  ;cperl-tab-always-indent t ;
-;	  cperl-highlight-variables-indiscriminately t) ;スカラを常にハイライト
-
-;(when (require 'perl-mode nil t)
-;  (add-to-list 'auto-mode-alist '("\\.t\\'" . perl-mode))
-;  (add-to-list 'auto-mode-alist '("\\.pm\\'" . perl-mode))
-;  (add-to-list 'auto-mode-alist '("\\.psgi\\'" . perl-mode)))
-
-
-;;perl-completionの設定
-;(defun perl-completion-hook ()
-;  (when (require 'perl-completion nil t)
-;	(perl-completion-mode t)
-;	(when (require 'auto-complete nil t)
-;	  (auto-complete-mode t)
-;	  (make-variable-buffer-local 'ac-sources)
-;	  (setq ac-sources
-;			'(ac-source-perl-completion)))))
-;(add-hook 'cperl-mode-hook 'perl-completion-hook)
-
-
 (leaf perl-mode
   :ensure nil  ;; perl-modeはEmacsに標準で付属
   :mode (("\\.pl\\'" . perl-mode)   ;; Perlスクリプト

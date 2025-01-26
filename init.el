@@ -4,11 +4,10 @@
 ;; 必要なパッケージのロードやカスタム設定が行われます。
 ;;; Code:
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 設定でやりたいこと
 ;; 1. パッケージ管理の設定
-;; 	- straight.el
+;; 	- leaf
 ;; 2. 各種パッケージのインストール
 ;; 3. ロードパスの設定(配下のサブディレクトリも読み込む、自作のディレクトリもパスに含める)
 ;; 4. 環境変数の読み込み
@@ -18,10 +17,11 @@
 ;; 8. 自動補完機能と構文解析機能の設定
 ;; 	- Ivy
 ;; 	- Counsel
-;;      - Flycheck
-;; 	- Company
+;;  - Flycheck
+;; 	- Company(不使用)
 ;; 	- Eglot
-;; 	- AI?
+;;  - Corfu
+;; 	- AI(Codeium)
 ;; 9. 各プログラミング言語の設定
 ;;10. 自動で編集されるcustom-set-variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -40,56 +40,13 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 1.パッケージ管理の設定
-;; straight.elを使用(require 'package)はしないので以下の設定は不要。
-;; straight.elをやめる時用にコメントアウトで設定を残す。
 (require 'package)
-;(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 ;; エイリアスの設定みたいなもの
 ;; 2024年10月現在も必要な処理か不明
 ;(fset 'package-desc-vers 'package-ac-desc-version)
 
-;; パッケージリストの初期化
-;; ver27以降は不要な処理(起動時に自動で実行されているはず)
-;(package-initialize)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 1-1.use-packageの設定
-;; straight.elを利用するのでこの設定は不要
-;(require 'use-package)
-;(setq use-package-always-ensure t)  ;; パッケージがなければ自動インストール
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 1-2.straight.elの設定
-;; straight.elのブートストラップコード
-
-;(defvar bootstrap-version)
-;(let ((bootstrap-file
-;       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-;      (bootstrap-version 6))
-;  (unless (file-exists-p bootstrap-file)
-;    (with-current-buffer
-;        (url-retrieve-synchronously
-;         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-;         'silent 'inhibit-cookies)
-;      (goto-char (point-max))
-;      (eval-print-last-sexp)))
-;  (load bootstrap-file nil 'nomessage))
-
-;; straight.elでuse-packageを管理
-;; これでuse-package単独の設定は不要(1-1の設定が不要)
-;(straight-use-package 'use-package)
-;; use-packageが自動的にstraight.elを使用するように設定
-;(setq straight-use-package-by-default t)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 1-3.leafの設定
+;;; leafの設定
 ;; leafのインストールとブートストラップコード
 (eval-and-compile
   ;; パッケージアーカイブを設定
@@ -121,23 +78,8 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 2.straight.elを使用したパッケージのインストール(事前インストールするもの)
-
-;(use-package request-deferred
-;  :straight t
-;  :config
-;  ;; 必要に応じた設定を追加
-;  )
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 2.leafを使用したパッケージのインストール(事前インストールするもの)
-;(leaf request-deferred
-;  :ensure t
-;  :config
-;  ;; 必要に応じた設定を追加
-;  )
+
 ;; request-deferredはMELPAにないのでdeferred
 (leaf deferred
   :ensure t
@@ -190,13 +132,6 @@ PATHS: List of directory paths to add to 'load-path'."
        ((eq system-type 'windows-nt) IS-WINDOWS) ;; Windows
        (t IS-UNKNOWN)))  ;; その他、未対応のOS
 
-;; straight.elを使ってインストール
-;(straight-use-package 'exec-path-from-shell)
-
-;(when (memq window-system '(mac ns x))
-;  (exec-path-from-shell-initialize))
-
-;; leaf版
 (leaf exec-path-from-shell
   :doc "Get environment variables such as $PATH from the shell"
   :ensure t
@@ -263,36 +198,6 @@ PATHS: List of directory paths to add to 'load-path'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 8.自動補完機能と構文解析機能の設定
 ;;; 8-1.ivy
-;(use-package ivy
-;  :diminish
-;  :bind (("C-s" . swiper)
-;         :map ivy-minibuffer-map
-;         ("TAB" . ivy-alt-done))
-;  :config
-;  (ivy-mode 1)
-;  (setq ivy-use-virtual-buffers t
-;        ivy-count-format "(%d/%d) "
-;        enable-recursive-minibuffers t
-;	ivy-height 20
-;	ivy-extra-directories nil
-;	ivy-re-builders-alist '((t . ivy--regex-plus))))
-
-;; leaf版
-;(leaf ivy
-;  :ensure t
-;  :diminish t
-;  :bind (("C-s" . swiper)  ;; SwiperをC-sにバインド
-;         :map ivy-minibuffer-map
-;         ("TAB" . ivy-alt-done))  ;; TABでivy-alt-doneを実行
-;  :custom ((ivy-use-virtual-buffers . t)  ;; 仮想バッファを有効化
-;           (ivy-count-format . "(%d/%d) ") ;; ミニバッファの表示形式
-;           (enable-recursive-minibuffers . t) ;; 再帰的ミニバッファを有効化
-;           (ivy-height . 20)  ;; ivyの高さを20行に設定
-;           (ivy-extra-directories . nil)  ;; `.`と`..`を非表示にする
-;           (ivy-re-builders-alist . '((t . ivy--regex-plus)))) ;; 再構築関数をivy--regex-plusに設定
-;  :config
-;  (ivy-mode 1))  ;; ivyを有効化
-
 (leaf ivy
   :ensure t
   ;;:diminish t
@@ -308,55 +213,11 @@ PATHS: List of directory paths to add to 'load-path'."
   ;; 特定のキーマップにバインドを追加
   (define-key ivy-minibuffer-map (kbd "TAB") 'ivy-alt-done))  ;; TABでivy-alt-doneを実行
 
-
-;; use-packageを使っていなかった頃の設定
-;(require 'ivy)
-;(ivy-mode 1)
-;(setq ivy-use-virtual-buffers t)
-;(setq enable-recursive-minibuffers t)
-;(setq ivy-height 20) ;; minibufferのサイズを拡大！（重要）
-;(setq ivy-extra-directories nil)
-;(setq ivy-re-builders-alist
-;      '((t . ivy--regex-plus)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 8-2.counsel
-;(use-package counsel
-;  :after ivy
-;  :bind (("M-x" . counsel-M-x)
-;         ("C-x C-f" . counsel-find-file)
-;         ("C-c k" . counsel-rg)
-;         ("C-c g" . counsel-git)
-;         ("C-c j" . counsel-file-jump)
-;         ("C-x b" . ivy-switch-buffer)
-;         ("C-x C-b" . ivy-switch-buffer)))
-
-;(counsel-mode 1)
-;;; 下記は任意で有効化
-;(global-set-key "\C-s" 'swiper)
-;(global-set-key (kbd "C-c C-r") 'ivy-resume)
-;(global-set-key (kbd "<f6>") 'ivy-resume)
-;(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-;(global-set-key (kbd "C-c g") 'counsel-git)
-;(global-set-key (kbd "C-c j") 'counsel-git-grep)
-;(global-set-key (kbd "C-c k") 'counsel-ag)
-;(global-set-key (kbd "C-x l") 'counsel-locate)
-;(global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-
-;; これらは counsel-mode で自動で設定されるため、明示的に設定しなくてよい
-;;(global-set-key (kbd "M-x") 'counsel-M-x)
-;;(global-set-key (kbd "C-x C-f") 'counsel-find-file)
-;;(global-set-key (kbd "<f1> f") 'counsel-describe-function)
-;;(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-;;(global-set-key (kbd "<f1> l") 'counsel-load-library)
-;;(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-;;(define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
-
-;(defvar counsel-find-file-ignore-regexp (regexp-opt '("./" "../")))
-
-;; leaf版
 (leaf counsel
   :ensure t
   :after ivy  ;; ivyの後に読み込む
@@ -378,29 +239,8 @@ PATHS: List of directory paths to add to 'load-path'."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 7-3.flycheck
-;(use-package flycheck
-;  :straight t
-;  :init (global-flycheck-mode)
-;  :config
-;  (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled) ;; 自動起動
-;        flycheck-idle-change-delay 2.0)  ;; コード変更後のチェックを遅延を2秒に設定
-;  ;; 特定モードで無効化(org, markdown)
-;  (add-hook 'org-mode-hook (lambda () (flycheck-mode -1)))
-;  (add-hook 'markdown-mode-hook (lambda () (flycheck-mode -1)))
-;  ;; キーバインドを設定
-;  (define-key flycheck-mode-map (kbd "C-c ! n") 'flycheck-next-error)
-;  (define-key flycheck-mode-map (kbd "C-c ! p") 'flycheck-previous-error)
-;  (define-key flycheck-mode-map (kbd "C-c ! l") 'flycheck-list-errors))
+;;; 8-3.flycheck
 
-;; eslint 用の linter を登録
-;(flycheck-add-mode 'javascript-eslint 'web-mode)
-
-;; 作業している projectの node-module をみて、適切にlinterの設定を読み込む
-;(eval-after-load 'web-mode
-;  '(add-hook 'web-mode-hook #'add-node-modules-path))
-
-;; leaf版
 (leaf flycheck
   :ensure t
   :init
@@ -432,98 +272,22 @@ PATHS: List of directory paths to add to 'load-path'."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 7-4.company (LSP & corfuにするので不要)
-;(use-package company
-;  :straight t
-;  :hook (after-init . global-company-mode)
-;  :config
-;  (setq company-idle-delay 0.2                    ; 補完が表示されるまでの遅延時間
-;        company-minimum-prefix-length 1            ; 補完が始まるまでの入力文字数
-;        company-tooltip-align-annotations t        ; 右側を揃える
-;        company-selection-wrap-around t)           ; 候補の一番下の次は一番上に戻る
-;
-;  ;; Eglotとの統合のため、company-backendsに'company-capfを設定
-;  (setq company-backends '(company-capf))
-;
-;  ;; キーバインド設定
-;  (define-key company-active-map (kbd "C-n") 'company-select-next)    ;; C-n, C-pで補完候補を次/前の候補を選択
-;  (define-key company-active-map (kbd "C-p") 'company-select-previous)
-;  (define-key company-search-map (kbd "C-n") 'company-select-next)
-;  (define-key company-search-map (kbd "C-p") 'company-select-previous)
-;  (define-key company-active-map (kbd "C-s") 'company-filter-candidates) ;; C-sで絞り込む
-;  (define-key company-active-map [tab] 'company-complete-selection)    ;; TABで候補を設定
-;  (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete)     ;; 各種メジャーモードでも C-M-iで company-modeの補完を使う
-;  )
-;
-;
-;(global-set-key (kbd "C-M-i") 'company-complete)
-
-;; 自分は使わない
-;(setq company-show-quick-access t)  ;; 必要に応じて無効化
-;(setq company-tooltip-flip-when-above nil)
+;;; 8-4.company (LSP & corfuにするので不要)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 8-5.Eglotの設定
-;; 基本的なEgloのt設定
-;(use-package eglot
-;  :straight t
-;  :hook ((html-mode . eglot-ensure)
-;         (css-mode . eglot-ensure)
-;         (web-mode . eglot-ensure)
-;	 (sh-mode . eglot-ensure)
-;         (js-mode . eglot-ensure)
-;         (typescript-mode . eglot-ensure)
-;         (java-mode . eglot-ensure)
-;         (kotlin-mode . eglot-ensure)
-;         (php-mode . eglot-ensure)
-;         (perl-mode . eglot-ensure)
-;         (ruby-mode . eglot-ensure)
-;         (python-mode . eglot-ensure)
-;         (erlang-mode . eglot-ensure)
-;         (go-mode . eglot-ensure)
-;         (rust-mode . eglot-ensure)
-;         (csharp-mode . eglot-ensure)
-;         (fsharp-mode . eglot-ensure)
-;         (clojure-mode . eglot-ensure)
-;	 ((c-mode c++-mode) . eglot-ensure)
-;	 )
-;  :config
-;  ;; flymakeを無効にして、flycheckを使う
-;  (add-hook 'eglot-managed-mode-hook (lambda () (flymake-mode -1)))
-;  (add-to-list 'eglot-server-programs '(perl-mode . ("perl" "-MPerl::LanguageServer" "-e" "Perl::LanguageServer::run" "--" "--port" "13603"))))
 
-;; eldocの設定
-;(setq eldoc-echo-area-use-multiline-p nil)  ;; 複数行のエラーメッセージを無効化
-
-;; Ivyとの連携
-;(use-package ivy-xref
-;  :straight t
-;  :init
-;  ;; xrefのUIをivyに変更
-;  (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
-
-;; leaf版
-;; Eglotの設定
 (leaf eglot
   :ensure t
   ;:hook ()
   :custom
-  (eldoc-echo-area-use-multiline-p . nil) ;; 複数行エラーメッセージ無効化
+  (eldoc-echo-area-use-multiline-p . nil) ;; eldocの設定：複数行エラーメッセージ無効化
   :config
   ;; Flymakeを無効化してFlycheckを利用
   (add-hook 'eglot-managed-mode-hook (lambda () (flymake-mode -1)))
-  ;(add-to-list 'eglot-server-programs
-  ;             '(perl-mode . ("perl" "-MPerl::LanguageServer" "-e" "Perl::LanguageServer::run" "--" "--port" "13603"))) ;; Perl用LSPサーバーを登録
-  ;(add-to-list 'eglot-server-programs
-  ;             '(css-mode . ("vscode-css-languageserver" "--stdio"))) ;; CSS他LSPサーバー
-  ;(add-to-list 'eglot-server-programs
-  ;             '(js2-mode . ("vscode-css-languageserver" "--stdio"))) ;; JS他LSPサーバー
-  ;(add-to-list 'eglot-server-programs
-  ;             '(terraform-mode . ("terraform-ls" "serve")))  ;; terraform-lsを使用
-
   ;; eglotがロードされた後にLSPサーバーを登録
   (eval-after-load 'eglot
     '(dolist (server '((perl-mode . ("perl" "-MPerl::LanguageServer" "-e" "Perl::LanguageServer::run" "--" "--port" "13603"))
@@ -532,8 +296,11 @@ PATHS: List of directory paths to add to 'load-path'."
                        (terraform-mode . ("terraform-ls" "serve"))))
        (add-to-list 'eglot-server-programs server))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Corfuの設定
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 8-6. Corfuの設定
 (leaf corfu
   :ensure t
   :init
@@ -559,7 +326,7 @@ PATHS: List of directory paths to add to 'load-path'."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 実験: Codeium API (コード生成AI)
+;;; 8-7. Codeium (コード生成AI)
 (leaf codeium
   ;; MELPAに登録されていない
   ;:ensure t

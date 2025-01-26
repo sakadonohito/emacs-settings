@@ -4,11 +4,6 @@
 ;; 必要なパッケージのロードやカスタム設定が行われます。
 ;;; Code:
 
-;; terraform-mode の導入
-;(use-package terraform-mode
-;  :straight t
-;  :mode "\\.tf\\'")
-
 (leaf terraform-mode
   :ensure t
   :mode ("\\.tf\\'" . terraform-mode)  ;; `.tf`拡張子でterraform-modeを有効化

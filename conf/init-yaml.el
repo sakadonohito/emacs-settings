@@ -4,11 +4,6 @@
 ;; 必要なパッケージのロードやカスタム設定が行われます。
 ;;; Code:
 
-;; yaml-mode の導入
-;(use-package yaml-mode
-;  :straight t
-;  :mode "\\.yml\\'")
-
 (leaf yaml-mode
   :ensure t
   :mode "\\.yml\\'"
