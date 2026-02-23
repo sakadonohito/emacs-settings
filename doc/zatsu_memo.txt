@@ -20,7 +20,7 @@ C-M-j
 ;(global-set-key (kbd "C-c d") 'make-directory)
 
 その場でLisp実行と評価
-C-Shift-j
+C-j
 
 ;;; Git
 ("C-x g" . magit-status)
@@ -75,5 +75,26 @@ g: 特定のコミットIDにジャンプ（goto）
 C-x C-f で新規ファイルや別名保存の際にivyの補完が効きすぎて新規ファイル名を包含する既存ファイル名に勝手に置換してしまう場合は
 C-M-j で確定することによって回避できる。 ※地味に重要！！！
 
+;;; flycheck
+C-c ! l -> エラーのリスト表示
+
 ;;; 複数のバッファ閉じる
 M-x ibuffer でバッファリストが出るのでそこで閉じたいバッファを選択(mキー)、その後D(Shift + d)で閉じる。
+
+;;; deadgrep/wgrep
+検索モード： C-c s / M-x deadgrep
+編集モード： 検索結果画面で e / C-x C-q
+正規表現使いたい場合:
+M-% で色つきregexp
+M-x query-replace
+M-x query-replace-regexp
+置換：
+y: 置換して次へ
+n: 置換せず次へ
+!: カーソル以下を全て置換
+保存： C-c C-c
+
+;; 他キーバインド
+
+;;; Markdown
+C-c M-p -> プレビューモード起動

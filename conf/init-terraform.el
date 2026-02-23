@@ -1,4 +1,4 @@
-;;; init-terraform.el --- Emacs initialization file
+;;; terraform.el --- Emacs initialization file -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; このファイルは Emacs の初期設定ファイルです。
 ;; 必要なパッケージのロードやカスタム設定が行われます。
@@ -12,5 +12,5 @@
 ;; LSP
 ;; brew install terraform-ls
 
-(provide 'init-terraform)
-;;; init-terraform.el ends here
+(provide 'terraform)
+;;; terraform.el ends here

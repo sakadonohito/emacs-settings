@@ -1,4 +1,4 @@
-;;; init-php.el --- Emacs initialization file
+;;; php.el --- Emacs initialization file -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; このファイルは php-modeの設定ファイルです
 ;;; Code:
@@ -27,5 +27,5 @@
 ;; LSP server
 ;; npm install -g intelephense
 
-(provide 'init-php)
-;;; init-php.el ends here
+(provide 'php)
+;;; php.el ends here

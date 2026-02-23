@@ -1,4 +1,4 @@
-;;; init-rust.el --- Emacs initialization file
+;;; rust.el --- Emacs initialization file -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; このファイルは rust-modeの設定ファイルです
 ;; 必要なパッケージのロードやカスタム設定が行われます。
@@ -40,5 +40,5 @@
 ;; cargo
 
 
-(provide 'init-rust)
-;;; init-rust.el ends here
+(provide 'rust)
+;;; rust.el ends here

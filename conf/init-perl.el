@@ -1,4 +1,4 @@
-;;; init-perl.el --- Emacs initialization file
+;;; perl.el --- Emacs initialization file -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; このファイルは perl-modeの設定ファイルです
 ;;; Code:
@@ -31,5 +31,5 @@
 ;; LSP server
 ;; cpanm Perl::LanguageServer
 
-(provide 'init-perl)
-;;; init-perl.el ends here
+(provide 'perl)
+;;; perl.el ends here

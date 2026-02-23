@@ -1,4 +1,4 @@
-;;; init-ruby.el --- Emacs initialization file
+;;; ruby.el --- Emacs initialization file -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; このファイルは ruby-modeの設定ファイルです
 ;;; Code:
@@ -42,5 +42,5 @@
 ;; LSP server
 ;; gem install solargraph
 
-(provide 'init-ruby)
-;;; init-ruby.el ends here
+(provide 'ruby)
+;;; ruby.el ends here

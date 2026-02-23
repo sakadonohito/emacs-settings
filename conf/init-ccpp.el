@@ -1,4 +1,4 @@
-;;; init-ccpp.el --- Emacs initialization file
+;;; ccpp.el --- Emacs initialization file -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; このファイルは C/C++の設定ファイルです
 ;; 必要なパッケージのロードやカスタム設定が行われます。
@@ -20,5 +20,5 @@
                               (local-set-key (kbd "C-M-<tab>") 'clang-format-buffer)))))) ;; フォーマット用のキー
 
 
-(provide 'init-ccpp)
-;;; init-ccpp.el ends here
+(provide 'ccpp)
+;;; ccpp.el ends here

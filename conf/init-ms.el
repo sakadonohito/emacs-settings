@@ -1,4 +1,4 @@
-;;; init-ms.el --- Emacs initialization file
+;;; ms.el --- Emacs initialization file -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; このファイルは Microsoft系言語の設定ファイルです
 ;; 必要なパッケージのロードやカスタム設定が行われます。
@@ -33,5 +33,5 @@
 ;; C#: https://github.com/OmniSharp/omnisharp-roslyn
 ;; F#: dotnet tool install --global fsautocomplete
 
-(provide 'init-ms)
-;;; init-ms.el ends here
+(provide 'ms)
+;;; ms.el ends here

@@ -1,4 +1,4 @@
-;;; init-beam.el --- Emacs initialization file
+;;; beam.el --- Emacs initialization file -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; このファイルは BEAM系言語の設定ファイルです
 ;; 必要なパッケージのロードやカスタム設定が行われます。
@@ -55,5 +55,5 @@
 ;; asdf global erlang <バージョン>
 
 
-(provide 'init-beam)
-;;; init-beam.el ends here
+(provide 'beam)
+;;; beam.el ends here

@@ -31,3 +31,9 @@ public_repos
 codeium/*
 #!codeium/.gitkeep
 
+custom.el
+
+eln-cache/*
+!eln-cache/.gitkeep
+
+projects

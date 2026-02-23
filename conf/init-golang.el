@@ -1,4 +1,4 @@
-;;; init-golang.el --- Emacs initialization file
+;;; golang.el --- Emacs initialization file -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; このファイルは go-modeの設定ファイルです
 ;; 必要なパッケージのロードやカスタム設定が行われます。
@@ -28,5 +28,5 @@
 ;; LSP
 ;; go install golang.org/x/tools/gopls@latest
 
-(provide 'init-golang)
-;;; init-golang.el ends here
+(provide 'golang)
+;;; golang.el ends here

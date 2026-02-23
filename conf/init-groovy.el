@@ -1,4 +1,4 @@
-;;; init-groovy.el --- Emacs initialization file
+;;; groovy.el --- Emacs initialization file -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; このファイルは groovy-mode関係の設定ファイルです。
 ;;; Code:
@@ -19,5 +19,5 @@
 ;; LSP
 ;; https://github.com/GroovyLanguageServer/groovy-language-server
 
-(provide 'init-groovy)
-;;; init-groovy.el ends here
+(provide 'groovy)
+;;; groovy.el ends here

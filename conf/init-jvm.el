@@ -1,4 +1,4 @@
-;;; init-jvm.el --- Emacs initialization file
+;;; jvm.el --- Emacs initialization file -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; このファイルは JVM言語系の設定ファイルです
 ;; 必要なパッケージのロードやカスタム設定が行われます。
@@ -37,5 +37,5 @@
 ;; Kotlin: brew install kotlin-language-server
 ;; Clojure: brew install clojure-lsp
 
-(provide 'init-jvm)
-;;; init-jvm.el ends here
+(provide 'jvm)
+;;; jvm.el ends here
