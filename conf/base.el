@@ -214,8 +214,8 @@
   (global-whitespace-mode +1)  ;; 空白強調モードを有効化
   :config
   ;; 記号の色調整
-  (set-face-attribute 'whitespace-tab nil :background nil :foreground "gray40")
-  (set-face-attribute 'whitespace-space nil :background nil :foreground "gray40"))
+  (set-face-attribute 'whitespace-tab nil :background 'unspecified :foreground "gray40")
+  (set-face-attribute 'whitespace-space nil :background 'unspecified :foreground "gray40"))
 
 ;; --------------------------------------------------
 ;; インデントを可視化
@@ -486,7 +486,8 @@
    ;; --------------------------------------------------
    ;; 1. Mac の CUI環境 (pbcopy / pbpaste を使用)
    ;; --------------------------------------------------
-   ((eq system-type 'darwin)
+   (mac-p
+   ;((eq system-type 'darwin)
     (defun my-cui-clipboard-copy (text &optional push)
       (let ((process-connection-type nil))
         (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
@@ -505,7 +506,8 @@
    ;; --------------------------------------------------
    ;; 2. Windows WSL の CUI環境 (Linuxとして認識されるが、Windowsのコマンドを使用)
    ;; --------------------------------------------------
-   ((and (eq system-type 'gnu/linux)
+   ((and linux-p
+   ;((and (eq system-type 'gnu/linux)
          (string-match-p "microsoft\\|wsl" (shell-command-to-string "uname -r")))
     (defun my-cui-clipboard-copy (text &optional push)
       (let ((process-connection-type nil))
@@ -523,7 +525,8 @@
    ;; --------------------------------------------------
    ;; 3. 純粋な Linux の CUI環境 (xclip を使用)
    ;; --------------------------------------------------
-   ((eq system-type 'gnu/linux)
+   (linux-p
+   ;((eq system-type 'gnu/linux)
     ;; OS側に xclip コマンドがインストールされている前提
     (when (executable-find "xclip")
       (defun my-cui-clipboard-copy (text &optional push)
@@ -539,7 +542,8 @@
    ;; --------------------------------------------------
    ;; 4. Windows の CUI環境 (コマンドプロンプトやPowerShell等)
    ;; --------------------------------------------------
-   ((eq system-type 'windows-nt)
+   (windows-p
+   ;((eq system-type 'windows-nt)
     (defun my-cui-clipboard-copy (text &optional push)
       (let ((process-connection-type nil))
         (let ((proc (start-process "clip" "*Messages*" "clip")))
