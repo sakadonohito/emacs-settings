@@ -5,7 +5,7 @@
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 設定でやりたいこと
+;;; 設定項目
 ;; 1. パッケージ管理の設定
 ;;    - use-package (Emacs 29+ 標準)
 ;; 2. 各種パッケージのインストール(事前インストールするもの)
@@ -36,7 +36,8 @@
 ;;      - Corfu
 ;;      - Kind-icon
 ;;      - Cape
-;;    8-6. AI(Codeium:不使用)
+;;    8-6. AIの設定
+;;      - Codeium -- 補完用
 ;; 9. ターミナルの設定
 ;;10. 各プログラミング言語の設定
 ;;11. 自動で編集されるcustom-set-variables
@@ -270,56 +271,11 @@ PATHS: List of directory paths to add to 'load-path'."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 8-6. Codeium (コード生成AI)
-;(leaf codeium
-;  ;; MELPAに登録されていない
-;  ;:ensure t
-;  ;; :vcキーワードが使えない
-;  ;:vc ( :url "https://github.com/Exafunction/codeium.el"
-;  ;      :lisp-dir "elisp")
-;  :require t
-;  :init
-;  ;; 補完機能を追加
-;  ;; completion-at-point-functions に codeium-completion-at-point を追加
-;  (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
-;  ;; 起動時に Codeium を初期化（オプション）
-;  (add-hook 'emacs-startup-hook
-;            (lambda () (run-with-timer 0.1 nil #'codeium-init)))
-;  :config
-;  ;; ポップアップダイアログを使用しない
-;  (setq use-dialog-box nil)
-;  ;; モードラインに Codeium のステータスを表示
-;  (setq codeium-mode-line-enable
-;        (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
-;  (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
-;  ;; 有効な API を制限
-;  (setq codeium-api-enabled
-;        (lambda (api)
-;          (memq api '(GetCompletions Heartbeat CancelRequest GetAuthToken RegisterUser auth-redirect AcceptCompletion))))
-;  ;; パフォーマンス向上のために送信文字列を制限
-;  (defun my-codeium/document/text ()
-;    (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (min (+ (point) 1000) (point-max))))
-;  (defun my-codeium/document/cursor_offset ()
-;    (codeium-utf8-byte-length
-;     (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
-;  (setq codeium/document/text 'my-codeium/document/text)
-;  (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset)
-;
-;  ;; 必要な初期セットアップを実行(導入後1回手動で実行すればよい。設定の中にある必要はない)
-;  ;(codeium-install)
-;  )
+;; ====================================================================
+;;; 8-6. AIの設定
+;; ====================================================================
 
-;; 必要に応じて API キーを設定
-;; (setq codeium-api-key "YOUR_CODEIUM_API_KEY")
-
-;; ただのテキストエディットの時は作動しないようにする
-;(defun my-disable-codeium-in-markdown-and-org ()
-;  "Disable Codeium in markdown-mode and org-mode."
-;  (when (member major-mode '(markdown-mode org-mode))
-;    (codeium-mode -1)))
-;
-;(add-hook 'markdown-mode-hook #'my-disable-codeium-in-markdown-and-org)
-;(add-hook 'org-mode-hook #'my-disable-codeium-in-markdown-and-org)
+;; 8-6-1. コード補完
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -381,7 +337,7 @@ PATHS: List of directory paths to add to 'load-path'."
 ;(require 'ruby)
 
 ;;python
-(require 'python)
+(require 'python-settings)
 
 ;;Groovy
 ;(require 'groovy)

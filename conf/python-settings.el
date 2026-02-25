@@ -1,4 +1,4 @@
-;;; python.el --- Emacs initialization file -*- lexical-binding: t; -*-
+;;; python-settings.el --- Emacs initialization file -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; このファイルは python-modeの設定ファイルです
 ;; 必要なパッケージのロードやカスタム設定が行われます。
@@ -41,5 +41,5 @@
   :custom
   (blacken-line-length 88))
 
-(provide 'python)
-;;; python.el ends here
+(provide 'python-settings)
+;;; python-settings.el ends here

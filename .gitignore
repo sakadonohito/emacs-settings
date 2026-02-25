@@ -27,9 +27,10 @@ site-lisp/*
 #今や不要な存在かも。
 public_repos
 
-#codeiumディレクトリは必要に応じて除外指定を追加してください
+#codeium全体で不採用にしたので関連ファイルは除外対象とする
 codeium/*
 #!codeium/.gitkeep
+conf/codeium-settings.el
 
 custom.el
 
@@ -37,3 +38,4 @@ eln-cache/*
 !eln-cache/.gitkeep
 
 projects
+tree-sitter
