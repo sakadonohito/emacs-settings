@@ -18,17 +18,13 @@
   ;; (オプション) さらに高速化したい場合は、Eglotの内部ログ出力を無効化します
   (eglot-events-buffer-size 0)
   :config
-  ;; Flymakeを無効化してFlycheckを利用
-  (add-hook 'eglot-managed-mode-hook (lambda () (flymake-mode -1)))
-
   ;; eglotがロードされた後にLSPサーバーを登録
-  (with-eval-after-load 'eglot
-    (dolist (server '((perl-mode . ("perl" "-MPerl::LanguageServer" "-e" "Perl::LanguageServer::run" "--" "--port" "13603"))
-                      (css-mode . ("vscode-css-languageserver" "--stdio"))
-                      ;; ※以前のjs2-modeをjs-ts-modeに統合した場合はここも変更します
-                      (js-ts-mode . ("vscode-eslint-language-server" "--stdio"))
-                      (terraform-mode . ("terraform-ls" "serve"))))
-      (add-to-list 'eglot-server-programs server))))
+  (dolist (server '((perl-mode . ("perl" "-MPerl::LanguageServer" "-e" "Perl::LanguageServer::run" "--" "--port" "13603"))
+                    (css-mode . ("vscode-css-languageserver" "--stdio"))
+                    ;; ※以前のjs2-modeをjs-ts-modeに統合した場合はここも変更します
+                    (js-ts-mode . ("vscode-eslint-language-server" "--stdio"))
+                    (terraform-mode . ("terraform-ls" "serve"))))
+    (add-to-list 'eglot-server-programs server)))
 
 ;; --------------------------------------------------
 ;; 2. eglot-booster の設定 (LSP通信のJSONパースを爆速化)

@@ -1,4 +1,4 @@
-;;; base.el --- Emacs initialization file -*- lexical-binding: t; -*-
+;;; base-settings.el --- Emacs initialization file -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; このファイルは Emacs のGUIなどに関する初期設定ファイルです。
 ;;; Code:
@@ -245,7 +245,7 @@
   (doom-modeline-major-mode-icon t)       ;; 言語(メジャーモード)のアイコンを表示
   (doom-modeline-major-mode-color-icon t) ;; アイコンに色をつける
   ;; ファイルパスの表示方法（プロジェクトのルートからの相対パスでスッキリ表示）
-  (doom-modeline-buffer-file-name-style 'truncate-upto-project) 
+  (doom-modeline-buffer-file-name-style 'truncate-upto-project)
   (doom-modeline-vcs-max-length 25)       ;; Gitのブランチ名が長すぎる場合に省略する長さ
   (doom-modeline-enable-word-count nil)   ;; 単語数カウントは重くなることがあるので無効化
   )
@@ -401,6 +401,7 @@
 ;; C-tab で画面分割してカーソルを移動するショートカット的機能
 ;; --------------------------------------------------
 (defun other-window-or-split (val)
+  "C-tab で画面分割してVALウインドウにカーソルを移動するショートカット的機能."
   (interactive)
   (when (one-window-p)
     (split-window-horizontally)) ;split horizontally
@@ -579,5 +580,5 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(provide 'base)
-;;; base.el ends here
+(provide 'base-settings)
+;;; base-settings.el ends here

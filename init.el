@@ -27,7 +27,7 @@
 ;;      - Consult
 ;;      - Embark
 ;;      - Embark-Consult
-;;    8-3. Flycheck
+;;    8-3. 構文チェック (Flymake + Flycheck統合)
 ;;    8-4. LSP
 ;;      - Eglot
 ;;      - eldoc-box
@@ -104,21 +104,22 @@
 ;; サブディレクトリも読み込む関数
 ;; load-pathを追加する関数の定義
 ;; --------------------------------------------------
-(defun add-to-load-path (&rest paths)
-  "Add specified PATHS to the 'load-path'.
-Each path in PATHS is relative to 'user-emacs-directory',
+(eval-and-compile
+  (defun add-to-load-path (&rest paths)
+    "Add specified PATHS to the `load-path`.
+Each path in PATHS is relative to `'user-emacs-directory`,
 and subdirectories are also added if applicable.
-PATHS: List of directory paths to add to 'load-path'."
-  (let (path)
-    (dolist (path paths paths)
-      (let ((default-directory
-	     (expand-file-name (concat user-emacs-directory path))))
-	(add-to-list 'load-path default-directory)
-	(if (fboundp 'normal-top-level-add-subdirs-to-load-path)
-	    (normal-top-level-add-subdirs-to-load-path))))))
+PATHS: List of directory paths to add to `load-path`."
+    (let (path)
+      (dolist (path paths paths)
+        (let ((default-directory
+	       (expand-file-name (concat user-emacs-directory path))))
+	  (add-to-list 'load-path default-directory)
+	  (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
+	      (normal-top-level-add-subdirs-to-load-path))))))
 
-;; 引数のディレクトリとそのサブディレクトリをload-pathに追加
-(add-to-load-path "elisp" "conf")
+  ;; 引数のディレクトリとそのサブディレクトリをload-pathに追加
+  (add-to-load-path "elisp" "conf"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -195,7 +196,7 @@ PATHS: List of directory paths to add to 'load-path'."
 ;; 基本設定のファイルを読み込み
 ;; 画面、キーバインド、SSH設定など
 ;; --------------------------------------------------
-(require 'base)
+(require 'base-settings)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -219,35 +220,10 @@ PATHS: List of directory paths to add to 'load-path'."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 8-3.flycheck
-(use-package flycheck
-  :ensure t
-  :init
-  (global-flycheck-mode)  ;; Flycheckをグローバルで有効化
-  :custom
-  (flycheck-check-syntax-automatically '(save idle-change mode-enabled))  ;; 自動チェックのタイミング
-  (flycheck-idle-change-delay 2.0) ;; チェックを2秒遅延
-  (flycheck-python-flake8-executable "flake8") ;; flake8を利用した構文チェック
-  :config
-  ;; 特定モードでFlycheckを無効化
-  (add-hook 'org-mode-hook (lambda () (flycheck-mode -1)))
-  (add-hook 'markdown-mode-hook (lambda () (flycheck-mode -1)))
-  ;; Flycheckのキーバインドを設定
-  (define-key flycheck-mode-map (kbd "C-c ! n") 'flycheck-next-error)
-  (define-key flycheck-mode-map (kbd "C-c ! p") 'flycheck-previous-error)
-  (define-key flycheck-mode-map (kbd "C-c ! l") 'flycheck-list-errors))
-
-;;; Emacs30 かつuse-packageを使うので以下の記述は無効に :2026-02-19
-
-;; eslint 用の linter を登録
-;(leaf :config
-;  (flycheck-add-mode 'javascript-eslint 'web-mode))
-
-;; 作業しているプロジェクトの node-modules を考慮
-;(leaf add-node-modules-path
-;  :ensure t
-;  :hook (web-mode-hook . add-node-modules-path))
-
+;; ====================================================================
+;; 8-3. 構文チェック (Flymake + Flycheck統合)
+;; ====================================================================
+(require 'flymake-settings)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
