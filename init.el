@@ -37,7 +37,7 @@
 ;;      - Kind-icon
 ;;      - Cape
 ;;    8-6. AIの設定
-;;      - Codeium -- 補完用
+;;
 ;; 9. ターミナルの設定
 ;;10. 各プログラミング言語の設定
 ;;11. 自動で編集されるcustom-set-variables
