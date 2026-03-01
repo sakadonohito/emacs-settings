@@ -6,7 +6,10 @@
 ;;; leafからuse-packageに変更&必要設定のみに記述を限定
 (use-package org
   :custom
-  (org-startup-truncated nil))
+  (org-startup-truncated nil)
+  :config
+  (require 'org-tempo) ;; <s + TAB で #+begin_src が展開可能に
+  )
 
 (provide 'org-settings)
 ;;; org-settings.el ends here

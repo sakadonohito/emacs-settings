@@ -26,8 +26,8 @@
 ;; 7-2. Forge: GitHub/GitLabのIssueやPRをMagit内で操作
 ;; --------------------------------------------------
 (use-package forge
-  :ensure t
   :after magit
+  :ensure t
   :custom
   (forge-topic-list-limit '(10 . 0)) ;; オープンなIssue/PRを10件までに絞る（動作を軽量化）
   ) ;; Magitが読み込まれた後に自動で有効化
@@ -37,13 +37,13 @@
 ;; --------------------------------------------------
 (use-package diff-hl
   :ensure t
+  :init
+  (global-diff-hl-mode)
   :hook ((prog-mode . diff-hl-mode)
          (text-mode . diff-hl-mode) ;; ドキュメントやメモ帳(Markdown, Org等)でも有効化
          (dired-mode . diff-hl-dired-mode)
          (magit-pre-refresh . diff-hl-magit-pre-refresh)
          (magit-post-refresh . diff-hl-magit-post-refresh))
-  :init
-  (global-diff-hl-mode)
   :config
   ;; CUI(ターミナル)環境では標準のフリンジ(端の余白)が使えないため、
   ;; 文字領域(マージン)に変更バーを描画するように自動フォールバック
@@ -64,7 +64,7 @@
 (use-package blamer
   :ensure t
   ;; 常に表示すると画面がうるさくなるため、必要な時だけON/OFFできるようにする
-  :bind (("C-c g b" . blamer-mode)) 
+  :bind (("C-c g b" . blamer-mode))
   ;:config
   ;(set-face-attribute 'blamer-face nil :background 'unspecified)
   :custom
@@ -79,19 +79,19 @@
 ;; --------------------------------------------------
 (use-package smerge-mode
   :ensure nil ;; Emacs標準搭載のためインストール不要
-  ;; Magitからコンフリクトしているファイルを開いた時、自動で有効化する魔法のフック
-  :hook (magit-diff-visit-file . (lambda ()
-                                   (when (save-excursion
-                                           (goto-char (point-min))
-                                           (re-search-forward "^<<<<<<< " nil t))
-                                     (smerge-mode 1))))
   :bind (:map smerge-mode-map
               ("C-c ^ n" . smerge-next)          ;; 次のコンフリクト箇所へ
               ("C-c ^ p" . smerge-prev)          ;; 前のコンフリクト箇所へ
               ("C-c ^ u" . smerge-keep-upper)    ;; 相手(Upper)の変更を採用
               ("C-c ^ l" . smerge-keep-lower)    ;; 自分(Lower)の変更を採用
               ("C-c ^ a" . smerge-keep-all)      ;; 両方(All)の変更を採用
-              ("C-c ^ RET" . smerge-keep-current))) ;; カーソルがある方の変更を採用
+              ("C-c ^ RET" . smerge-keep-current)) ;; カーソルがある方の変更を採用
+  ;; Magitからコンフリクトしているファイルを開いた時、自動で有効化する魔法のフック
+  :hook (magit-diff-visit-file . (lambda ()
+                                   (when (save-excursion
+                                           (goto-char (point-min))
+                                           (re-search-forward "^<<<<<<< " nil t))
+                                     (smerge-mode 1)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

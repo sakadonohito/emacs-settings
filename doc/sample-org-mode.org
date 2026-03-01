@@ -96,6 +96,13 @@ _アンダーライン_
 
 =[[URL][リンク名]]= [[http://yahoo.co.jp][yahoo]]
 
+*** コードブロック
+#+begin_src javascript
+console.log('aaa')
+#+end_src
+「<s」と記述してTABキー押すと展開される
+※Emacs26.1以降では、設定ファイルに (require 'org-tempo) と書き足しておく必要あり。
+
 C-c C-l でミニバッファでURLと名前(説明)を入力してリンクを挿入することができる。
 その際、http(s)以外のURIを選択することも可能。すごいね。
 [[https:nfljapan.com][NFLJapan]]

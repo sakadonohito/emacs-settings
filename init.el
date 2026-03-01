@@ -175,6 +175,23 @@ PATHS: List of directory paths to add to `load-path`."
 (defconst windows-p (eq system-type 'windows-nt) "Windows環境なら t.")
 
 ;; --------------------------------------------------
+;; macOS ネイティブコンパイル環境設定 (Warning対策)
+;; --------------------------------------------------
+
+;(when (eq system-type 'darwin)
+(when mac-p
+  ;; SDKパスを取得してLIBRARY_PATHに設定（ld: library 'System' not found 対策）
+  (let ((sdk-path (string-trim (shell-command-to-string "xcrun --show-sdk-path"))))
+    (when (and sdk-path (not (string-empty-p sdk-path)))
+      (setenv "LIBRARY_PATH"
+              (concat (getenv "LIBRARY_PATH") ":" sdk-path "/usr/lib"))
+      ;; コンパイラオプションにも追加
+      (setq native-comp-driver-options (list (concat "-L" sdk-path "/usr/lib"))))))
+
+;; ネイティブコンパイルの警告を抑制したい場合は、以下のコメントを外す
+;; (setq native-comp-async-report-warnings-errors 'silent)
+
+;; --------------------------------------------------
 ;; Emacsが自動編集しちゃうcustom-set-variablesを別ファイルに隔離する
 ;; --------------------------------------------------
 ;; 1. Emacsに「今後の自動書き込みはこのファイル（custom.el）に」と指定
@@ -182,6 +199,74 @@ PATHS: List of directory paths to add to `load-path`."
 ;; 2. もしそのファイルが既に存在していれば、中身を読み込む
 (when (file-exists-p custom-file)
   (load custom-file))
+
+;; --------------------------------------------------
+;; treesit用セットアップ
+;; --------------------------------------------------
+
+;; URLリスト
+(setq treesit-language-source-alist
+      '(
+        (yaml       "https://github.com/ikatyang/tree-sitter-yaml")
+        (markdown "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown/src")
+        (markdown-inline "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown-inline/src")
+        ;; --- インフラ・設定系 ---
+        (toml       "https://github.com/tree-sitter/tree-sitter-toml")
+        (dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")
+        ;(terraform  "https://github.com/MichaHoffmann/tree-sitter-hcl")
+
+        ;; --- シェル系 ---
+        (bash       "https://github.com/tree-sitter/tree-sitter-bash")
+        ;; ※zshはbash文法で代用するか、個別に探す必要があります（標準外が多いです）
+
+        ;; --- Webフロントエンド ---
+        (html       "https://github.com/tree-sitter/tree-sitter-html")
+        (css        "https://github.com/tree-sitter/tree-sitter-css")
+        (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
+        (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+        (tsx        "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+
+        ;; --- 主要スクリプト言語 ---
+        (python     "https://github.com/tree-sitter/tree-sitter-python")
+        (perl       "https://github.com/ganezdragon/tree-sitter-perl")
+        ;(php        "https://github.com/tree-sitter/tree-sitter-php")
+        ;(ruby       "https://github.com/tree-sitter/tree-sitter-ruby")
+
+        ;; --- システム・コンパイル言語 ---
+        ;(go         "https://github.com/tree-sitter/tree-sitter-go")
+        ;(rust       "https://github.com/tree-sitter/tree-sitter-rust")
+        ;(c          "https://github.com/tree-sitter/tree-sitter-c")
+        ;(cpp        "https://github.com/tree-sitter/tree-sitter-cpp")
+        ;(c-sharp    "https://github.com/tree-sitter/tree-sitter-c-sharp")
+
+        ;; --- JVM系 ---
+        ;(java       "https://github.com/tree-sitter/tree-sitter-java")
+        (kotlin     "https://github.com/fwcd/tree-sitter-kotlin")
+        ;(scala      "https://github.com/tree-sitter/tree-sitter-scala")
+        ;(groovy     "https://github.com/Decitrig/tree-sitter-groovy")
+
+        ;; --- 関数型・その他 ---
+        ;(clojure    "https://github.com/sogaiu/tree-sitter-clojure")
+        ;(erlang     "https://github.com/WhatsApp/tree-sitter-erlang")
+        ;(elixir     "https://github.com/elixir-lang/tree-sitter-elixir")
+        ;(swift      "https://github.com/alex-pinkus/tree-sitter-swift")
+        ;(fsharp     "https://github.com/ionide/tree-sitter-fsharp")
+
+        ;; --- Windows系 ---
+        ;(powershell "https://github.com/Airbus-CyberSecurity/tree-sitter-powershell")
+        ))
+
+;; 自動インストール実行
+;; 起動時に未インストールの文法があれば自動でビルドを試みる
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (dolist (lang treesit-language-source-alist)
+              (unless (treesit-language-available-p (car lang))
+                (condition-case err
+                    (treesit-install-language-grammar (car lang))
+                  (error
+                   (message "Tree-sitter install error (%s): %s"
+                            (car lang) (error-message-string err))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -292,7 +377,7 @@ PATHS: List of directory paths to add to `load-path`."
 
 ;;;;; Web系(フロントエンド系)
 
-;;web-mode
+;;html/css
 (require 'html-css)
 
 ;;javascript
@@ -319,7 +404,7 @@ PATHS: List of directory paths to add to `load-path`."
 ;(require 'groovy)
 
 ;;JVM(Java,Kotlin,Clojure)
-;(require 'jvm)
+(require 'jvm)
 
 ;;MS(C#,F#)
 ;(require 'ms)

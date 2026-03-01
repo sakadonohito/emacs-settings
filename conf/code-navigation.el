@@ -1,4 +1,9 @@
 ;;; code-navigation.el --- Emacs initialization file -*- lexical-binding: t; -*-
+;;; Commentary:
+;; このファイルは Emacs のコードナビゲーション関連設定ファイルです。
+;; 必要なパッケージのロードやカスタム設定が行われます。
+;;; Code:
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ====================================================================
 ;; 8-1 & 8-2. 検索・移動・アクション (Vertico + Consult + Marginalia + Embark)
@@ -7,7 +12,7 @@
 ;; --------------------------------------------------
 ;; 8-1-1. Vertico: 垂直方向の美しいミニバッファUI
 ;; --------------------------------------------------
-(use-package vertico
+( use-package vertico
   :ensure t
   :init
   (vertico-mode)
@@ -68,11 +73,12 @@
 ;; --------------------------------------------------
 (use-package embark
   :ensure t
-  :bind (("C-." . embark-act)         ;; 選択中の候補に対してアクションを実行
-         ("C-c b" . embark-bindings)) ;; 現在使えるキーバインド一覧を検索
   :init
   ;; アクションメニューを画面下部に表示する設定
-  (setq prefix-help-command #'embark-prefix-help-command))
+  (setq prefix-help-command #'embark-prefix-help-command)
+  :bind (("C-." . embark-act)         ;; 選択中の候補に対してアクションを実行
+         ("C-c b" . embark-bindings)) ;; 現在使えるキーバインド一覧を検索
+  )
 
 ;; --------------------------------------------------
 ;; 8-1-5. Embark-Consult: Embark と Consult の連携

@@ -13,32 +13,8 @@
 ;; 9-1. ターミナルエミュレータ「eat」本体の設定
 ;; -------------------------------------------------------------------
 (use-package eat
-  :ensure t
-  :functions eat-semi-char-mode         ;; 「後で定義されるから警告しないで」と伝える
-  :bind (
-         ("C-c t" . my-eat-new-window)  ;; terminalのt。コマンドごとに新規ウインドウ
-         ("C-c e" . eat)                ;; eatのe。標準のeatを起動
-         ("C-c s" . my-eat-toggle)      ;; shellのs。固有ターミナルをトグルする関数
-         :map eat-mode-map
-         ("C-c C-k" . my-eat-kill-buffer-and-window) ;; kill buffer のオーバーライド
-         )
-  :custom
-  (eat-term-name "xterm-256color")      ;; top/tail -f の色・表示が安定
-  (eat-kill-buffer-on-exit t)           ;; ターミナル終了時にバッファも消す
-  :preface
-  (defvar eat-buffer-name)              ;; 遅延ロード対策
-
-  :config
-  ;(setq eat-shell "zsh")                ;; 自動で$SHELLを読み込むので指定不要。書き換え用に消さずに残す
-  (cond
-   ;; Windows環境の場合 (PowerShellやGit Bashなどを明示的に指定してください)
-   (windows-p ;; (eq system-type 'windows-nt)
-    (setq eat-shell "pwsh")) ;; または "powershell", "bash" など環境に合わせて
-   ;; Mac / Linux環境の場合はOSの $SHELL を適用する
-   (t
-    ;; 何もしない（自動で $SHELL が読み込まれる）
-    ))
-
+  :preface ;; 遅延ロード対策 自作変数や関数の定義
+  (defvar eat-buffer-name)
   ;; ---------------------------------------------------------
   ;; ① [C-c t] 新しいターミナルを生成する関数
   ;; ---------------------------------------------------------
@@ -82,18 +58,40 @@
     (interactive)
     (let ((buf (current-buffer))
           (process (get-buffer-process (current-buffer))))
-
       ;; 1. プロセスが動いていたら「killしていい？」の確認を無効化する魔法
-      ;(when process
-      ;  (set-process-query-on-exit-flag process nil))
+      (when process
+        (set-process-query-on-exit-flag process nil))
 
       ;; 2. ウインドウが分割されていれば、まずウインドウ枠を閉じる
       (unless (one-window-p)
         (delete-window))
 
       ;; 3. 裏側でバッファを確実に消し去る（プロセスも死ぬ）
-      ;(kill-buffer buf)
-))
+      (kill-buffer buf)
+      ))
+
+  :functions eat-semi-char-mode         ;; 「後で定義されるから警告しないで」と伝える
+  :ensure t
+  :bind (
+         ("C-c t" . my-eat-new-window)  ;; terminalのt。コマンドごとに新規ウインドウ
+         ("C-c e" . eat)                ;; eatのe。標準のeatを起動
+         ("C-c s" . my-eat-toggle)      ;; shellのs。固有ターミナルをトグルする関数
+         :map eat-mode-map
+         ("C-c C-k" . my-eat-kill-buffer-and-window) ;; kill buffer のオーバーライド
+         )
+  :custom
+  (eat-term-name "xterm-256color")      ;; top/tail -f の色・表示が安定
+  (eat-kill-buffer-on-exit t)           ;; ターミナル終了時にバッファも消す
+  :config
+  ;(setq eat-shell "zsh")                ;; 自動で$SHELLを読み込むので指定不要。書き換え用に消さずに残す
+  (cond
+   ;; Windows環境の場合 (PowerShellやGit Bashなどを明示的に指定してください)
+   (windows-p ;; (eq system-type 'windows-nt)
+    (setq eat-shell "pwsh")) ;; または "powershell", "bash" など環境に合わせて
+   ;; Mac / Linux環境の場合はOSの $SHELL を適用する
+   (t
+    ;; 何もしない（自動で $SHELL が読み込まれる）
+    ))
 
   ;; ---------------------------------------------------------
   ;; ④ 見た目の調整（フック）
@@ -102,7 +100,8 @@
             (lambda ()
               (display-line-numbers-mode -1) ;; 行番号を非表示
               (setq-local cursor-type 'bar)  ;; barカーソルにする
-              )))
+              ))
+)
 
 (provide 'terminal)
 ;;; terminal.el ends here

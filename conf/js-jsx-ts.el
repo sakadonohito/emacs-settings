@@ -12,21 +12,51 @@
   :ensure nil
   :mode (("\\.js\\'" . js-ts-mode)
          ("\\.jsx\\'" . js-ts-mode))
+
+  :hook (js-ts-mode . eglot-ensure)   ;; LSPを有効化
   :custom
-  (js-indent-level 2)                 ;; インデント幅を2に設定
-  :hook (js-ts-mode . eglot-ensure))  ;; LSPを有効化
+  ;; デフォルトは「2」
+  (js-indent-level 2)                 ;; インデント幅を2に設定(これを設定しないと「4」になってしまう)
+  ;(js-ts-mode-indent-offset 2)        ;; Tree-sitter版はこちらが優先
+  )
 
 ;; -------------------------------------------------------------------
-;; TypeScript / TSX (Tree-sitter版標準機能)
+;; TypeScript (Tree-sitter版標準機能)
 ;; -------------------------------------------------------------------
 (use-package typescript-ts-mode
   :ensure nil
-  :mode (("\\.ts\\'" . typescript-ts-mode)
-         ("\\.tsx\\'" . tsx-ts-mode))        ;; TSX専用のTree-sitterモード
+  :mode (("\\.ts\\'" . typescript-ts-mode))
+  :hook ((typescript-ts-mode . eglot-ensure)) ;; TypeScript用LSPを有効化
   :custom
+  ;; デフォルトは「2」
   (typescript-ts-mode-indent-offset 2)       ;; インデント幅を設定
-  :hook ((typescript-ts-mode . eglot-ensure) ;; TypeScript用LSPを有効化
-         (tsx-ts-mode . eglot-ensure)))      ;; TypeScript用LSPを有効化
+  )
+
+;; -------------------------------------------------------------------
+;; TSX (React用 .tsx)
+;; ※typescript-ts-modeとは別に設定
+;; -------------------------------------------------------------------
+(use-package tsx-ts-mode
+  :ensure nil
+  :mode ("\\.tsx\\'" . tsx-ts-mode)
+  :hook (tsx-ts-mode . eglot-ensure)
+  :custom
+  ;;; デフォルトは「2」
+  (typescript-ts-mode-indent-offset 2)
+  )
+
+;; -------------------------------------------------------------------
+;; JSON
+;; -------------------------------------------------------------------
+(use-package json-ts-mode
+  :ensure nil
+  :mode (("\\.json\\'" . json-ts-mode)
+         ("\\.jsonc\\'" . json-ts-mode))
+  :hook (json-ts-mode . eglot-ensure)
+  :custom
+  ;; デフォルトは「2」
+  (json-ts-mode-indent-offset 2)
+  )
 
 (provide 'js-jsx-ts)
 ;;; js-jsx-ts.el ends here

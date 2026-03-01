@@ -7,9 +7,16 @@
 ;;; leafやめてuse-packageに変更。内容も最小限に。
 ;; Emacs本体に組み込まれているTree-sitter版のモードを使用します
 (use-package yaml-ts-mode
+  :ensure nil
+  :init
+  (add-to-list 'major-mode-remap-alist '(yaml-mode . yaml-ts-mode))
   :mode ("\\.ya?ml\\'" . yaml-ts-mode)
-  :custom
-  (yaml-indent-offset 2))
+  :hook
+  (yaml-ts-mode . eglot-ensure)
+  ;:custom
+  ;; デフォルトは「2」
+  ;(yaml-indent-offset 2)
+  )
 
 (provide 'yaml)
 ;;; yaml.el ends here

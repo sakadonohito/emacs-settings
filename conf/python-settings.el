@@ -15,10 +15,11 @@
 (use-package python-ts-mode
   :ensure nil
   :mode ("\\.py\\'" . python-ts-mode)
+  :interpreter ("python" . python-ts-mode)
+  :hook (python-ts-mode . eglot-ensure)
   :custom
   (python-shell-interpreter "python")
-  (python-indent-offset 4)
-  :hook (python-ts-mode . eglot-ensure))
+  (python-indent-offset 4))
 
 ;; --------------------------------------------------
 ;; Python仮想環境 (pyenv/virtualenv) のサポート

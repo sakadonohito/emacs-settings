@@ -28,21 +28,6 @@
 ;; ====================================================================
 
 (use-package emacs
-  :custom
-  (backup-inhibited t)                          ;; バックアップファイルを作成しない
-  (make-backup-files nil)                       ;; バックアップ無効
-  (delete-auto-save-files t)                    ;; 終了時にオートセーブファイルを削除
-  (setq auto-save-default nil)                  ;; 自動保存無効
-  (setq auto-save-list-file-prefix nil)         ;; 自動保存のリストを作成しない
-  (column-number-mode t)                        ;; 列数表示
-  (line-number-mode t)                          ;; 行数表示
-  (display-line-numbers-width 5)                ;; 行番号の幅
-  (display-line-numbers-format "%5d")           ;; 行番号フォーマット
-  (use-short-answers t)                         ;; yes/no を y/n に変更
-  (default-tab-width 2)                         ;; タブ幅を2に設定
-  (indent-tabs-mode nil)                        ;; インデントでタブを使用しない
-  (indent-line-function 'indent-relative-maybe) ;; 相対インデントを使用
-  (ns-alt-modifier 'meta)                       ;; AltキーをMetaキーとして使用
   :bind
   (("C-z" . undo)                                ;; UndoをCtrl+zに
    ("C-S-z" . undo-redo)                         ;; RedoをCtrl+Shift+zに
@@ -62,6 +47,23 @@
    ("M-n" . (lambda () (interactive) (other-window-or-split 1)))
    ("M-p" . (lambda () (interactive) (other-window-or-split -1)))
     )
+  :custom
+  (backup-inhibited t)                          ;; バックアップファイルを作成しない
+  (make-backup-files nil)                       ;; バックアップ無効
+  (delete-auto-save-files t)                    ;; 終了時にオートセーブファイルを削除
+  (setq auto-save-default nil)                  ;; 自動保存無効
+  (setq auto-save-list-file-prefix nil)         ;; 自動保存のリストを作成しない
+  (column-number-mode t)                        ;; 列数表示
+  (line-number-mode t)                          ;; 行数表示
+  (display-line-numbers-width 5)                ;; 行番号の幅
+  (display-line-numbers-format "%5d")           ;; 行番号フォーマット
+  (use-short-answers t)                         ;; yes/no を y/n に変更
+  (tab-width 2)                                 ;; タブ文字の表示幅
+  (default-tab-width 2)                         ;; タブ幅を2に設定
+  (standard-indent 2)                           ;; デフォルトインデント幅を2に設定
+  (indent-tabs-mode nil)                        ;; インデントでタブを使用しない
+  (indent-line-function 'indent-relative-maybe) ;; 相対インデントを使用
+  (ns-alt-modifier 'meta)                       ;; AltキーをMetaキーとして使用
   :config
   ;; early-init.elに設定を移動
   ;(set-face-attribute 'default nil :height 180) ;; フォントサイズを18pxに設定
@@ -200,6 +202,8 @@
 ;; --------------------------------------------------
 (use-package whitespace
   :ensure nil
+  :init
+  (global-whitespace-mode +1)  ;; 空白強調モードを有効化
   :custom
   ;; 1. 対象の指定（行末、タブ、スペース、およびそれぞれの記号化）
   (whitespace-style '(face trailing tabs tab-mark spaces space-mark))
@@ -210,8 +214,6 @@
   (whitespace-display-mappings
    '((tab-mark   ?\t   [?\u00BB ?\t] [?\\ ?\t])
      (space-mark ?\u3000 [?\u25A1]     [?_])))
-  :init
-  (global-whitespace-mode +1)  ;; 空白強調モードを有効化
   :config
   ;; 記号の色調整
   (set-face-attribute 'whitespace-tab nil :background 'unspecified :foreground "gray40")
@@ -222,12 +224,13 @@
 ;; --------------------------------------------------
 (use-package highlight-indent-guides
   :ensure t
+  :hook ((prog-mode . highlight-indent-guides-mode)       ;; プログラムモードで有効化
+         (text-mode . highlight-indent-guides-mode))     ;; テキストモードで有効化
   :custom
   (highlight-indent-guides-method 'character)             ;; インデントを文字で表示
   (highlight-indent-guides-character 124)                 ;; '|'で表示
-  (highlight-indent-guides-responsive 'top)               ;; レスポンシブ設定
-  :hook ((prog-mode . highlight-indent-guides-mode)       ;; プログラムモードで有効化
-         (text-mode . highlight-indent-guides-mode)))     ;; テキストモードで有効化
+  (highlight-indent-guides-responsive 'top))              ;; レスポンシブ設定
+
 
 
 ;; --------------------------------------------------
@@ -290,11 +293,6 @@
          ("TAB" . dirvish-subtree-toggle)
          ;; q を押した時にサイドバー（またはDirvish全体）を閉じる
          ("q" . dirvish-quit))
-  :config
-  ;; macOSなど特定の環境で C-x C-f でディレクトリが開けなくなる問題の対策
-  (setq dired-use-ls-dired nil)
-  ;; 隠しファイル（-a）と詳細リスト（-l）、読みやすいサイズ表記（-h）
-  (setq dired-listing-switches "-alh")
   :custom
   ;; サイドバーの幅（お好みで数値を調整してください）
   (dirvish-side-width 30)
@@ -303,6 +301,11 @@
   ;; UIをリッチにする属性の有効化（アイコン表示、ツリー表示の許可、Gitのステータスなど）
   (dirvish-attributes '(nerd-icons collapse git-msg))
   ;;(dired-listing-switches "-alh --group-directories-first") ;; 隠しファイルも表示
+  :config
+  ;; macOSなど特定の環境で C-x C-f でディレクトリが開けなくなる問題の対策
+  (setq dired-use-ls-dired nil)
+  ;; 隠しファイル（-a）と詳細リスト（-l）、読みやすいサイズ表記（-h）
+  (setq dired-listing-switches "-alh")
 )
 
 ;; dirvishに移行したので無効

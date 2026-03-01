@@ -6,9 +6,13 @@
 
 ;; Emacs 29以降標準搭載の Tree-sitter 版を使用
 (use-package dockerfile-ts-mode
-  ;; 組み込み機能のため外部からのインストールは不要
+  :ensure nil
+  :init
+  ;; 旧モードを呼び出そうとしても強制的に Tree-sitter 版へ転送
+  (add-to-list 'major-mode-remap-alist '(dockerfile-mode . dockerfile-ts-mode))
   :mode ("Dockerfile\\'" . dockerfile-ts-mode)
-  :hook (dockerfile-ts-mode . eglot-ensure))
+  :hook
+  (dockerfile-ts-mode . eglot-ensure))
 
 (provide 'docker)
 ;;; docker.el ends here
