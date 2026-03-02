@@ -207,6 +207,7 @@ PATHS: List of directory paths to add to `load-path`."
 ;; URLリスト
 (setq treesit-language-source-alist
       '(
+        (json "https://github.com/tree-sitter/tree-sitter-json")
         (yaml       "https://github.com/ikatyang/tree-sitter-yaml")
         (markdown "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown/src")
         (markdown-inline "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown-inline/src")
@@ -228,31 +229,39 @@ PATHS: List of directory paths to add to `load-path`."
 
         ;; --- 主要スクリプト言語 ---
         (python     "https://github.com/tree-sitter/tree-sitter-python")
-        (perl       "https://github.com/ganezdragon/tree-sitter-perl")
+        ;; perl用はまだない
+        ;(perl       "https://github.com/ganezdragon/tree-sitter-perl")
+        ;(perl ("https://github.com/tree-sitter-perl/tree-sitter-perl" "release"))
+        ;; php用はまだない?
         ;(php        "https://github.com/tree-sitter/tree-sitter-php")
-        ;(ruby       "https://github.com/tree-sitter/tree-sitter-ruby")
+        (ruby       "https://github.com/tree-sitter/tree-sitter-ruby")
 
         ;; --- システム・コンパイル言語 ---
-        ;(go         "https://github.com/tree-sitter/tree-sitter-go")
-        ;(rust       "https://github.com/tree-sitter/tree-sitter-rust")
+        (go         "https://github.com/tree-sitter/tree-sitter-go")
+        (rust       "https://github.com/tree-sitter/tree-sitter-rust")
+        ;; ts-mode 使ってないからいらない？
         ;(c          "https://github.com/tree-sitter/tree-sitter-c")
         ;(cpp        "https://github.com/tree-sitter/tree-sitter-cpp")
-        ;(c-sharp    "https://github.com/tree-sitter/tree-sitter-c-sharp")
+        (c-sharp    "https://github.com/tree-sitter/tree-sitter-c-sharp")
 
         ;; --- JVM系 ---
-        ;(java       "https://github.com/tree-sitter/tree-sitter-java")
+        (java       "https://github.com/tree-sitter/tree-sitter-java")
         (kotlin     "https://github.com/fwcd/tree-sitter-kotlin")
-        ;(scala      "https://github.com/tree-sitter/tree-sitter-scala")
+        (scala      "https://github.com/tree-sitter/tree-sitter-scala")
+        ;; うまくいかない
         ;(groovy     "https://github.com/Decitrig/tree-sitter-groovy")
 
         ;; --- 関数型・その他 ---
-        ;(clojure    "https://github.com/sogaiu/tree-sitter-clojure")
-        ;(erlang     "https://github.com/WhatsApp/tree-sitter-erlang")
-        ;(elixir     "https://github.com/elixir-lang/tree-sitter-elixir")
+        (clojure    "https://github.com/sogaiu/tree-sitter-clojure")
+        (erlang     "https://github.com/WhatsApp/tree-sitter-erlang")
+        (elixir     "https://github.com/elixir-lang/tree-sitter-elixir")
+        ;; swift用はまだない?
         ;(swift      "https://github.com/alex-pinkus/tree-sitter-swift")
+        ;; F#用はまだない
         ;(fsharp     "https://github.com/ionide/tree-sitter-fsharp")
 
         ;; --- Windows系 ---
+        ;; powershell用はまだない?
         ;(powershell "https://github.com/Airbus-CyberSecurity/tree-sitter-powershell")
         ))
 
@@ -359,6 +368,9 @@ PATHS: List of directory paths to add to `load-path`."
 ;;org
 (require 'org-settings)
 
+;;xml
+(require 'xml-settings)
+
 ;;yaml
 (require 'yaml)
 
@@ -377,11 +389,14 @@ PATHS: List of directory paths to add to `load-path`."
 
 ;;;;; Web系(フロントエンド系)
 
+;;Web(html,css/sass,json,js/jsx,ts,tsx)
+(require 'web-dev)
+
 ;;html/css
-(require 'html-css)
+;(require 'html-css)
 
 ;;javascript
-(require 'js-jsx-ts)
+;(require 'js-jsx-ts)
 
 ;;;;; 他プログラミング言語
 
@@ -392,7 +407,7 @@ PATHS: List of directory paths to add to `load-path`."
 ;(require 'php)
 
 ;;perl
-;(require 'perl)
+(require 'perl-settings)
 
 ;;ruby
 ;(require 'ruby)
@@ -400,17 +415,14 @@ PATHS: List of directory paths to add to `load-path`."
 ;;python
 (require 'python-settings)
 
-;;Groovy
-;(require 'groovy)
-
-;;JVM(Java,Kotlin,Clojure)
+;;JVM(Java,Kotlin,Clojure,Scala,Groovy)
 (require 'jvm)
 
 ;;MS(C#,F#)
 ;(require 'ms)
 
 ;;C/C++
-;(require 'ccpp)
+(require 'ccpp-settings)
 
 ;;golang
 ;; golangがインストールされているMacでのみ動作させる

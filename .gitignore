@@ -2,6 +2,9 @@
 .cache
 ac-comphist.dat
 auto-save-list/*
+backups/*
+*~
+\#*\#
 
 recentf
 straight/*
@@ -39,3 +42,19 @@ eln-cache/*
 
 projects
 tree-sitter
+
+#LSP用バイナリを配置する場所
+servers/*
+!servers/.gitkeep
+
+#markdownのプレビューファイル
+doc/.markdown-preview.html
+
+
+#キャッシュ系
+projectile-bookmarks.eld
+projectile.cache
+kkcrc
+network-security.data
+places
+/forge-database.sqlite

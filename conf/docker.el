@@ -12,7 +12,11 @@
   (add-to-list 'major-mode-remap-alist '(dockerfile-mode . dockerfile-ts-mode))
   :mode ("Dockerfile\\'" . dockerfile-ts-mode)
   :hook
-  (dockerfile-ts-mode . eglot-ensure))
+  (dockerfile-ts-mode . eglot-ensure)
+  :config
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 '(dockerfile-ts-mode . ("docker-langserver" "--stdio")))))
 
 (provide 'docker)
 ;;; docker.el ends here

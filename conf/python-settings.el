@@ -19,7 +19,11 @@
   :hook (python-ts-mode . eglot-ensure)
   :custom
   (python-shell-interpreter "python")
-  (python-indent-offset 4))
+  (python-indent-offset 4)
+  :config
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 '((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))))
 
 ;; --------------------------------------------------
 ;; Python仮想環境 (pyenv/virtualenv) のサポート

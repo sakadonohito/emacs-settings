@@ -56,7 +56,10 @@
   :custom
   ;; デフォルトは「2」
   (json-ts-mode-indent-offset 2)
-  )
+  :config
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 '(json-ts-mode . ("vscode-json-language-server" "--stdio")))))
 
 (provide 'js-jsx-ts)
 ;;; js-jsx-ts.el ends here

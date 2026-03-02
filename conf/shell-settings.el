@@ -30,7 +30,10 @@
   ;; デフォルトは「2」
   ;(sh-basic-offset 2)
   ;(sh-indentation 2)
-  )
+  :config
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 '((sh-mode bash-ts-mode) . ("bash-language-server" "start")))))
 
 ;; 2-2. それ以外の環境の場合(Mac zsh とか)
 (use-package sh-script
@@ -54,7 +57,10 @@
   ;; デフォルトは「2」
   ;(sh-basic-offset 2)
   ;(sh-indentation 2)
-  )
+  :config
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 '((sh-mode bash-ts-mode) . ("bash-language-server" "start")))))
 
 (provide 'shell-settings)
 ;;; shell-settings.el ends here

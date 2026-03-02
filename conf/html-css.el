@@ -12,7 +12,7 @@
 (use-package web-mode
   :ensure t
   :mode (("\\.html?\\'" . web-mode)
-         ("\\.xml\\'" . web-mode)
+         ;("\\.xml\\'" . web-mode)           ;; xml-ts-mode に移行
          ("\\.svg\\'" . web-mode)
          ("\\.php\\'" . web-mode)
          ("\\.tpl\\'" . web-mode)

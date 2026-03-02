@@ -1,0 +1,293 @@
+
+#+LSPメモ:
+
+** XML
+nxml-mode
+
+- lemminx
+
+*** install
+#+begin_src 
+git clone https://github.com/eclipse-lemminx/lemminx.git
+cd lemminx
+./mvnw clean verify
+cp org.eclipse.lemminx/target/org.eclipse.lemminx-uber.jar ~/.emacs.d/servers/
+#+end_src
+
+** Markdown
+markdown-mode
+
+- marksman
+
+*** install
+#+begin_src
+brew install marksman
+#+end_src
+
+#+begin_src 
+brew install marksman
+# brewだと入れられない場合はGitHubから直接DL
+https://github.com/artempyanykh/marksman/releases
+目的のものをDLしたら実行権限を付与して所定の場所に配置
+chmod +x marksman-macos
+sudo mv marksman-macos /usr/local/bin/marksman
+#+end_src
+
+** YAML
+yaml-mode / yaml-ts-mode
+- yaml-language-server
+
+*** install
+#+begin_src 
+brew install yaml-language-server
+#+end_src
+
+*** 補足
+github workflow用のyaml書く時は以下をYAMLファイルの先頭にコメントとして書くと良い
+#+begin_src 
+yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+#+end_src
+
+** TOML
+
+- taplo
+
+** Dockerfile
+dockerfile-mode
+
+- docker-langserver
+
+*** install
+
+#+begin_src 
+npm install -g dockerfile-language-server-nodejs
+#+end_src
+
+** Terraform
+terraform-mode
+- terraform-ls
+
+*** install
+
+** ShellScript / bash / zsh
+sh-mode / bash-ts-mode
+
+- bash-language-server
+
+*** install
+
+#+begin_src 
+brew install bash-language-server
+# linux環境の場合やnpmの方が都合がいい場合
+npm i -g bash-language-server
+#+end_src
+
+** html
+html-mode
+
+- vscode-html-language-server
+- vscode-langservers-extracted
+
+*** install
+#+begin_src 
+npm install -g vscode-langservers-extracted
+#+end_src
+
+*** 補足
+HTMLファイルに直接記述するCSSやJavaScript
+Eglot単体では1つのファイルに複数の言語が混ざる「Polyglot」な解析はやや苦手。
+vscode-html-language-server を入れれば、ある程度のインラインCSS/JS補完は効く。
+本格的にHTML内のJSも完璧に補完させたい場合は、LSPの追加ではなくEmacs側に polymode や web-mode という特殊なパッケージを導入し、ブロックごとにLSPを切り替えるハックが必要。
+
+vscode-langservers-extractedをインストールすれば
+
+- vscode-html-language-server (HTML用)
+- vscode-css-language-server (CSS / SCSS / Less 用)
+- vscode-json-language-server (JSON用)
+- vscode-eslint-language-server (ESLint用)
+
+をインストールしたのと同じ。のはず。。
+
+** CSS / Sass (SCSS)
+css-mode
+
+- vscode-css-languageserver
+- vscode-langservers-extracted
+
+*** install
+#+begin_src 
+npm install -g vscode-langservers-extracted
+npm install -g @tailwindcss/language-server
+#+end_src
+
+*** 補足
+vscode-langservers-extractedがCSSだけでなくSCSS/LESSも兼ねている
+
+** JavaScript / TypeScript
+js-mode / typescript-mode
+- typescript-language-server
+- vscode-eslint-language-server
+
+*** install
+#+begin_src 
+npm install -g typescript typescript-language-server
+#+end_src
+
+*** 補足
+typescript-language-serverが JS/TS/JSX を兼ねている。はず。。
+
+** Python
+python-ts-mode/python-mode
+
+- pyright
+- pylsp
+
+*** install
+
+#+begin_src 
+npm install -g pyright
+#+end_src
+
+** Perl
+perl-mode / cperl-mode
+
+- perl
+- MPerl::LanguageServer
+ポート指定("--port" "13603")
+
+*** install
+
+** PHP
+php-mode / php-ts-mode
+
+- intelephense
+
+** Ruby
+ruby-mode / ruby-ts-mode
+
+- solargraph
+
+*** install
+
+** Golang
+go-mode / go-ts-mode
+
+- gopls
+
+*** install
+
+** Rust
+rust-mode / rust-ts-mode
+
+- rust-analyzer
+
+*** install
+
+** C言語 / C++
+c-mode / c++-mode
+
+- clangd
+
+*** install
+#+begin_src 
+brew install llvm
+# /usr/local/opt/llvm/bin/clangd ができるはず
+#+end_src
+
+** C#
+csharp-mode / csharp-ts-mode
+
+- omnisharp
+- csharp-ls
+
+*** install
+
+** F#
+
+- fsautocomplete (FSAC)
+
+*** install
+
+** Java
+java-mode / java-ts-mode
+
+- jdtls
+
+*** install
+
+#+begin_src 
+# https://github.com/eclipse-jdtls/eclipse.jdt.ls ???
+brew install jdtls
+#+end_src
+
+** Kotlin
+kotlin-mode / kotlin-ts-mode
+
+- kotlin-lsp
+- kotlin-language-server
+
+*** install
+
+#+begin_src 
+brew tap jetbrains/utils
+brew install kotlin-lsp
+
+# or
+brew install kotlin-language-server
+#+end_src>
+
+** Scala
+scala-mode
+
+- metals
+
+*** install
+#+begin_src 
+brew install metals
+#+end_src
+
+** Clojure
+clojure-mode
+
+- clojure-lsp
+
+*** install
+
+#+begin_src 
+brew install clojure-lsp
+#+end_src>
+
+** Groovy
+
+- groovy-language-server
+
+*** install
+#+begin_src 
+# 1. GitHubからgit clone
+# 2. ./gradlew build
+# 3. 出来上がったjarファイルをEmacsから扱える場所に配置
+#+end_src>
+
+** Erlang
+erlang-mode
+
+- erlang_ls
+
+*** install
+
+** Elixir
+elixir-mode / elixir-ts-mode
+
+- elixir-ls
+
+*** install
+
+** Swift
+
+- sourcekit-lsp
+
+*** install
+
+*** 補足
+Mac（Xcode）環境であれば、設定不要で最初からシステムに入っていることが多い
+

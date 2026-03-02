@@ -20,12 +20,14 @@
   (markdown-ts-mode . eglot-ensure)
   :custom
   (markdown-command "multimarkdown")
-  )
+  :config
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 '(markdown-ts-mode . ("marksman" "server")))))
 
 (use-package markdown-preview-mode
   :ensure t
-  :after (markdown-mode markdown-ts-mode)
-)
+  :after (markdown-mode markdown-ts-mode))
 
 (provide 'markdown)
 ;;; markdown.el ends here

@@ -16,7 +16,10 @@
   ;:custom
   ;; デフォルトは「2」
   ;(yaml-indent-offset 2)
-  )
+  :config
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 '((yaml-ts-mode yaml-mode) . ("yaml-language-server" "--stdio")))))
 
 (provide 'yaml)
 ;;; yaml.el ends here
