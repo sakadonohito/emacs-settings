@@ -199,6 +199,13 @@ go-mode / go-ts-mode
 - gopls
 
 *** install
+#+begin_src 
+# gopls (LSPサーバ) のインストール
+go install golang.org/x/tools/gopls@latest
+
+# goimports (インポートの自動整理・フォーマット) のインストール
+go install golang.org/x/tools/cmd/goimports@latest
+#+end_src
 
 ** Rust
 rust-mode / rust-ts-mode

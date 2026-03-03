@@ -414,10 +414,7 @@ PATHS: List of directory paths to add to `load-path`."
 ;(require 'ms)
 
 ;;golang
-;; golangがインストールされているMacでのみ動作させる
-;(when (eq system-type 'darwin)
-;  (require 'golang)
-;)
+(require 'golang-settings)
 
 ;;Rust
 ;(require 'rust)
