@@ -253,6 +253,8 @@ PATHS: List of directory paths to add to `load-path`."
         (clojure    "https://github.com/sogaiu/tree-sitter-clojure")
         (erlang     "https://github.com/WhatsApp/tree-sitter-erlang")
         (elixir     "https://github.com/elixir-lang/tree-sitter-elixir")
+        (heex   "https://github.com/phoenixframework/tree-sitter-heex") ;; ElixirのHTMLテンプレート
+        (make   "https://github.com/alemuller/tree-sitter-make")        ;; ???
         ;; swift用はまだない?
         ;(swift      "https://github.com/alex-pinkus/tree-sitter-swift")
         ;; F#用はまだない
@@ -385,21 +387,16 @@ PATHS: List of directory paths to add to `load-path`."
 ;;Terraform
 ;(require 'terraform)
 
-;;;;; Web系(フロントエンド系)
-
-;;Web(html,css/sass,json,js/jsx,ts,tsx,php)
-(require 'web-dev)
-
-;;html/css
-;(require 'html-css)
-
-;;javascript
-;(require 'js-jsx-ts)
-
-;;;;; 他プログラミング言語
+;;;;; プログラミング言語
 
 ;;shell-pop
 (require 'shell-settings)
+
+;;C/C++
+(require 'ccpp-settings)
+
+;;Web(html,css/sass,json,js/jsx,ts,tsx,php)
+(require 'web-dev)
 
 ;;perl
 (require 'perl-settings)
@@ -416,9 +413,6 @@ PATHS: List of directory paths to add to `load-path`."
 ;;MS(C#,F#)
 ;(require 'ms)
 
-;;C/C++
-(require 'ccpp-settings)
-
 ;;golang
 ;; golangがインストールされているMacでのみ動作させる
 ;(when (eq system-type 'darwin)
@@ -429,7 +423,7 @@ PATHS: List of directory paths to add to `load-path`."
 ;(require 'rust)
 
 ;;BEAM(Erlang,Elixir)
-;(require 'beam)
+(require 'beam-settings)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

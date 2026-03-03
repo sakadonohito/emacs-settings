@@ -295,9 +295,13 @@ brew install clojure-lsp
 ** Erlang
 erlang-mode
 
-- erlang_ls
+- erlang-language-platform
 
 *** install
+#+begin_src 
+brew install erlang
+brew install erlang-language-platform
+#+end_src>
 
 ** Elixir
 elixir-mode / elixir-ts-mode
@@ -305,6 +309,10 @@ elixir-mode / elixir-ts-mode
 - elixir-ls
 
 *** install
+#+begin_src 
+brew install elixir
+brew install elixir-ls
+#+end_src>
 
 ** Swift
 
