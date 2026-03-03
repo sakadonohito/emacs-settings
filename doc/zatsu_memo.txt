@@ -71,12 +71,8 @@ g: 特定のコミットIDにジャンプ（goto）
 (global-set-key (kbd "<C-tab>") (lambda () (interactive) (other-window-or-split 1)))
 (global-set-key (kbd "<C-S-tab>") (lambda () (interactive) (other-window-or-split -1)))
 
-;;; ivy
-C-x C-f で新規ファイルや別名保存の際にivyの補完が効きすぎて新規ファイル名を包含する既存ファイル名に勝手に置換してしまう場合は
-C-M-j で確定することによって回避できる。 ※地味に重要！！！
-
-;;; flycheck
-C-c ! l -> エラーのリスト表示
+;;; flymake
+C-c l -> そのバッファのエラーリスト表示
 
 ;;; 複数のバッファ閉じる
 M-x ibuffer でバッファリストが出るのでそこで閉じたいバッファを選択(mキー)、その後D(Shift + d)で閉じる。

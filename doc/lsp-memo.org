@@ -177,9 +177,21 @@ M-x php-ts-mode-install-parsers
 ** Ruby
 ruby-mode / ruby-ts-mode
 
-- solargraph
+- ruby-lsp
 
 *** install
+#+begin_src 
+# プロジェクトごとにLSPサーバー(ruby-lsp)をセットアップする。
+mkdir project && cd $_
+# Gemfile サンプル
+source 'https://rubygems.org'
+ruby '3.4.8'
+gem 'ruby-lsp', '~> 0.26.7', require: false, group: :development
+gem 'rubocop', '~> 1.85'
+
+bundle install
+
+#+end_src
 
 ** Golang
 go-mode / go-ts-mode
