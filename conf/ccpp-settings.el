@@ -5,27 +5,24 @@
 ;;; Code:
 
 ;;C/C++
-(use-package cc-mode
-  :ensure nil
-  :commands (c-mode c++-mode)
-  :hook
-  ;((c-mode-hook c++-mode-hook c-mode-common-hook) . eglot-ensure)
-  ((c-mode-common) . eglot-ensure)
+(use-package c-ts-mode
+  :init
+  (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c-or-c++-mode . c-or-c++-ts-mode))
+  :hook ((c-ts-mode . eglot-ensure)
+         (c++-ts-mode . eglot-ensure))
   :config
-  ;; インデントスタイルなどの基本設定
-  (setq-default c-basic-offset 4)
-  ;(indent-tabs-mode . nil)     ;; タブをスペースに変換はいらんか？
-  (setq c-default-style "bsd")
+  (setq c-ts-mode-indent-offset 4)
+  (setq c-ts-mode-indent-style 'bsd)
   (with-eval-after-load 'eglot
     (add-to-list 'eglot-server-programs
-                 `((c-mode c++-mode) . ("/usr/local/opt/llvm/bin/clangd" ;; フルパスで指定
+                 `((c-ts-mode c++-ts-mode) . ("/usr/local/opt/llvm/bin/clangd" ;; フルパスで指定
                                         "--header-insertion=never"
                                         "--suggest-missing-includes"
                                         "--all-scopes-completion"
                                         "--completion-style=detailed"))))
-  )
-
-
+)
 
 (provide 'ccpp-settings)
 ;;; ccpp-settings.el ends here

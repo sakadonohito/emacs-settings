@@ -229,27 +229,24 @@ PATHS: List of directory paths to add to `load-path`."
 
         ;; --- 主要スクリプト言語 ---
         (python     "https://github.com/tree-sitter/tree-sitter-python")
-        ;; perl用はまだない
+        ;; perl用はまだない(ts-modeは使わないから不要)
         ;(perl       "https://github.com/ganezdragon/tree-sitter-perl")
         ;(perl ("https://github.com/tree-sitter-perl/tree-sitter-perl" "release"))
         (php "https://github.com/tree-sitter/tree-sitter-php" "master" "php/src")
-        ;; うまくいかないので諦めましょう
-        ;(phpdoc "https://github.com/tree-sitter/tree-sitter-php" "master" "phpdoc/src")
         (ruby       "https://github.com/tree-sitter/tree-sitter-ruby")
 
         ;; --- システム・コンパイル言語 ---
         (go         "https://github.com/tree-sitter/tree-sitter-go")
         (rust       "https://github.com/tree-sitter/tree-sitter-rust")
-        ;; ts-mode 使ってないからいらない？
-        ;(c          "https://github.com/tree-sitter/tree-sitter-c")
-        ;(cpp        "https://github.com/tree-sitter/tree-sitter-cpp")
+        (c          "https://github.com/tree-sitter/tree-sitter-c" "master" "src" nil nil)
+        (cpp        "https://github.com/tree-sitter/tree-sitter-cpp" "master" "src" "c++" nil)
         (c-sharp    "https://github.com/tree-sitter/tree-sitter-c-sharp")
 
         ;; --- JVM系 ---
         (java       "https://github.com/tree-sitter/tree-sitter-java")
         (kotlin     "https://github.com/fwcd/tree-sitter-kotlin")
         (scala      "https://github.com/tree-sitter/tree-sitter-scala")
-        ;; うまくいかない
+        ;; ts-mode使ってないから不要。そもそもURLが間違っている？
         ;(groovy     "https://github.com/Decitrig/tree-sitter-groovy")
 
         ;; --- 関数型・その他 ---
@@ -408,7 +405,7 @@ PATHS: List of directory paths to add to `load-path`."
 (require 'perl-settings)
 
 ;;ruby
-;(require 'ruby)
+(require 'ruby-settings)
 
 ;;python
 (require 'python-settings)

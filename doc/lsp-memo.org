@@ -169,6 +169,9 @@ cd ~/.emacs.d/servers/
 curl -Lo phpactor https://github.com/phpactor/phpactor/releases/latest/download/phpactor.phar
 chmod +x phpactor.phar
 mv ./phpactor.phar ./phpactor
+
+# *.dylibをインストールするためにEmacs起動後に以下を実行
+M-x php-ts-mode-install-parsers
 #+end_src
 
 ** Ruby

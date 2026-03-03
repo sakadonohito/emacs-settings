@@ -185,13 +185,5 @@
       (add-to-list 'eglot-server-programs
                    `(php-ts-mode . (,phpactor-path "language-server"))))))
 
-;;; もし Web-mode でも PHP を開く設定にしているなら、
-;;; eglot-server-programs に web-mode 用の登録もしておくと安心です
-;(with-eval-after-load 'eglot
-;  (let ((phpactor-path (expand-file-name "servers/phpactor" user-emacs-directory)))
-;    (add-to-list 'eglot-server-programs
-;                 `((web-mode) . (,phpactor-path "language-server")))))
-
-
 (provide 'web-dev)
 ;;; web-dev.el ends here
