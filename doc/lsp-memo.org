@@ -151,16 +151,25 @@ npm install -g pyright
 ** Perl
 perl-mode / cperl-mode
 
-- perl
-- MPerl::LanguageServer
-ポート指定("--port" "13603")
+- perlnavigator-server
 
 *** install
+#+begin_src 
+npm install -g perlnavigator-server
+#+end_src
 
 ** PHP
 php-mode / php-ts-mode
 
-- intelephense
+- phpactor
+
+*** install
+#+begin_src 
+cd ~/.emacs.d/servers/
+curl -Lo phpactor https://github.com/phpactor/phpactor/releases/latest/download/phpactor.phar
+chmod +x phpactor.phar
+mv ./phpactor.phar ./phpactor
+#+end_src
 
 ** Ruby
 ruby-mode / ruby-ts-mode

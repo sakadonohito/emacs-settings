@@ -232,8 +232,9 @@ PATHS: List of directory paths to add to `load-path`."
         ;; perl用はまだない
         ;(perl       "https://github.com/ganezdragon/tree-sitter-perl")
         ;(perl ("https://github.com/tree-sitter-perl/tree-sitter-perl" "release"))
-        ;; php用はまだない?
-        ;(php        "https://github.com/tree-sitter/tree-sitter-php")
+        (php "https://github.com/tree-sitter/tree-sitter-php" "master" "php/src")
+        ;; うまくいかないので諦めましょう
+        ;(phpdoc "https://github.com/tree-sitter/tree-sitter-php" "master" "phpdoc/src")
         (ruby       "https://github.com/tree-sitter/tree-sitter-ruby")
 
         ;; --- システム・コンパイル言語 ---
@@ -389,7 +390,7 @@ PATHS: List of directory paths to add to `load-path`."
 
 ;;;;; Web系(フロントエンド系)
 
-;;Web(html,css/sass,json,js/jsx,ts,tsx)
+;;Web(html,css/sass,json,js/jsx,ts,tsx,php)
 (require 'web-dev)
 
 ;;html/css
@@ -402,9 +403,6 @@ PATHS: List of directory paths to add to `load-path`."
 
 ;;shell-pop
 (require 'shell-settings)
-
-;;php
-;(require 'php)
 
 ;;perl
 (require 'perl-settings)

@@ -167,5 +167,31 @@
   ;; デフォルトは「2」
   (json-ts-mode-indent-offset 2))
 
+;; -------------------------------------------------------------------
+;; 9. PHPの設定
+;; -------------------------------------------------------------------
+(use-package php-ts-mode
+  :init
+  ;(add-to-list 'treesit-extra-load-path (expand-file-name "tree-sitter" user-emacs-directory))
+  (add-to-list 'major-mode-remap-alist '(php-mode . php-ts-mode))
+  :mode (("\\.php\\'" . php-mode)  ;; PHPスクリプト
+         ("\\.inc\\'" . php-mode)) ;; インクルードファイル
+  :hook (php-ts-mode . eglot-ensure)
+  :config
+  (setq php-ts-mode-indent-offset 2) ;; インデント設定（HTMLに合わせて2）
+  (with-eval-after-load 'eglot
+    ;; サーバーの絶対パスを servers/ から取得
+    (let ((phpactor-path (expand-file-name "servers/phpactor" user-emacs-directory)))
+      (add-to-list 'eglot-server-programs
+                   `(php-ts-mode . (,phpactor-path "language-server"))))))
+
+;;; もし Web-mode でも PHP を開く設定にしているなら、
+;;; eglot-server-programs に web-mode 用の登録もしておくと安心です
+;(with-eval-after-load 'eglot
+;  (let ((phpactor-path (expand-file-name "servers/phpactor" user-emacs-directory)))
+;    (add-to-list 'eglot-server-programs
+;                 `((web-mode) . (,phpactor-path "language-server")))))
+
+
 (provide 'web-dev)
 ;;; web-dev.el ends here
