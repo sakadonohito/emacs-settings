@@ -20,39 +20,6 @@
   (eglot-events-buffer-size 0)
   (eglot-ignored-server-capabilities '(:workspace/didChangeWorkspaceFolders)) ;; 警告抑制
   ;:config
-  ;; eglotがロードされた後にLSPサーバーを登録
-  ;; groovyのLSP jarファイルのためにletを使う
-  ;(setq eglot-server-programs nil)
-;  (let ((groovy-lsp-jar (expand-file-name "servers/groovy-language-server-all.jar" user-emacs-directory))
-;        (java-home "/usr/local/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home"))
-;    (dolist (server `(
-;                      ;; --- 汎用・単機能サーバー ---
-;                      ;(nxml-mode . ("lemminx"))
-;                      ;(json-ts-mode . ("vscode-json-language-server" "--stdio"))
-;                      ;((yaml-ts-mode yaml-mode) . ("yaml-language-server" "--stdio"))
-;                      ;(markdown-ts-mode . ("marksman" "server"))
-;                      ;(html-mode . ("vscode-html-language-server" "--stdio"))
-;                      ;((css-mode css-ts-mode scss-mode) . ("vscode-css-language-server" "--stdio"))
-;                      ;(web-mode . ("vscode-html-language-server" "--stdio"))
-;
-;                      ;; --- メインの言語サーバー (一番最後に評価されるように) ---
-;                      ;((js-ts-mode tsx-ts-mode typescript-ts-mode) . ("typescript-language-server" "--stdio"))
-;                      ;((sh-mode bash-ts-mode) . ("bash-language-server" "start"))
-;                      ;(dockerfile-ts-mode . ("docker-langserver" "--stdio"))
-;                      ;(terraform-mode . ("terraform-ls" "serve"))
-;                      ;(perl-mode . ("perl" "-MPerl::LanguageServer" "-e" "Perl::LanguageServer::run" "--" "--port" "13603"))
-;                      ;((cperl-mode) . ("perlnavigator" "--stdio"))
-;                      ;(python-ts-mode . ("pyright-langserver" "--stdio"))
-;
-;                      ;((java-mode java-ts-mode) . ("jdtls"))
-;                      ;((kotlin-mode kotlin-ts-mode) . ("kotlin-language-server"))
-;                      ;((clojure-mode clojurescript-mode clojurec-mode clojure-ts-mode) . ("clojure-lsp"))
-;                      ;((scala-mode) . ("metals"))
-;                      ;(groovy-mode . ("java"
-;                      ;                ,(concat "-Djava.home=" java-home)
-;                      ;                "-jar" ,groovy-lsp-jar))
-;                      ))
-;      (add-to-list 'eglot-server-programs server)))
   )
 
 ;; --------------------------------------------------
@@ -84,7 +51,7 @@
   ;; ポップアップの見た目を少し調整
   (set-face-attribute 'eldoc-box-border nil :background "gray30")
   (setq eldoc-box-max-pixel-width 600
-        eldoc-box-max-pixel-height 400))
+        eldoc-box-max-pixel-height 600))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

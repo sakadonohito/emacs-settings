@@ -211,11 +211,6 @@ PATHS: List of directory paths to add to `load-path`."
   ;; ここに共通の文法ソースリストなどを書く
   (setq treesit-font-lock-level 4)) ; ハイライトの精細度を最大に
 
-;; 念のため、rust の文法が利用可能かチェック
-;(when (treesit-ready-p 'rust)
-;  (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode)))
-
-
 ;; URLリスト
 (setq treesit-language-source-alist
       '(
@@ -223,14 +218,11 @@ PATHS: List of directory paths to add to `load-path`."
         (yaml       "https://github.com/ikatyang/tree-sitter-yaml")
         (markdown "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown/src")
         (markdown-inline "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown-inline/src")
-        ;; --- インフラ・設定系 ---
         (toml       "https://github.com/tree-sitter/tree-sitter-toml")
         (dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")
-        ;(terraform  "https://github.com/MichaHoffmann/tree-sitter-hcl")
 
         ;; --- シェル系 ---
         (bash       "https://github.com/tree-sitter/tree-sitter-bash")
-        ;; ※zshはbash文法で代用するか、個別に探す必要があります（標準外が多いです）
 
         ;; --- Webフロントエンド ---
         (html       "https://github.com/tree-sitter/tree-sitter-html")
@@ -238,12 +230,8 @@ PATHS: List of directory paths to add to `load-path`."
         (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
         (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
         (tsx        "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-
         ;; --- 主要スクリプト言語 ---
         (python     "https://github.com/tree-sitter/tree-sitter-python")
-        ;; perl用はまだない(ts-modeは使わないから不要)
-        ;(perl       "https://github.com/ganezdragon/tree-sitter-perl")
-        ;(perl ("https://github.com/tree-sitter-perl/tree-sitter-perl" "release"))
         (php "https://github.com/tree-sitter/tree-sitter-php" "master" "php/src")
         (ruby       "https://github.com/tree-sitter/tree-sitter-ruby")
 
@@ -258,19 +246,20 @@ PATHS: List of directory paths to add to `load-path`."
         (java       "https://github.com/tree-sitter/tree-sitter-java")
         (kotlin     "https://github.com/fwcd/tree-sitter-kotlin")
         (scala      "https://github.com/tree-sitter/tree-sitter-scala")
-        ;; ts-mode使ってないから不要。そもそもURLが間違っている？
-        ;(groovy     "https://github.com/Decitrig/tree-sitter-groovy")
+        ;; ts-mode使ってないから不要
+        ;(groovy     "")
 
         ;; --- 関数型・その他 ---
         (clojure    "https://github.com/sogaiu/tree-sitter-clojure")
+        (fsharp "https://github.com/KaranAhlawat/tree-sitter-fsharp")
         (erlang     "https://github.com/WhatsApp/tree-sitter-erlang")
         (elixir     "https://github.com/elixir-lang/tree-sitter-elixir")
         (heex   "https://github.com/phoenixframework/tree-sitter-heex") ;; ElixirのHTMLテンプレート
-        (make   "https://github.com/alemuller/tree-sitter-make")        ;; ???
-        ;; swift用はまだない?
-        ;(swift      "https://github.com/alex-pinkus/tree-sitter-swift")
-        ;; F#用はまだない
-        ;(fsharp     "https://github.com/ionide/tree-sitter-fsharp")
+        (make   "https://github.com/alemuller/tree-sitter-make")        ;; ???makefile用???
+        ;; swift用はまだない
+        ;(swift      "")
+        ;; F#はts-modeがまだ不完全？
+        ;(fsharp     "https://github.com/KaranAhlawat/tree-sitter-fsharp")
 
         ;; --- Windows系 ---
         ;; powershell用はまだない?
@@ -398,7 +387,7 @@ PATHS: List of directory paths to add to `load-path`."
 (require 'docker)
 
 ;;Terraform
-;(require 'terraform)
+(require 'terraform-settings)
 
 ;;;;; プログラミング言語
 
@@ -423,17 +412,20 @@ PATHS: List of directory paths to add to `load-path`."
 ;;JVM(Java,Kotlin,Clojure,Scala,Groovy)
 (require 'jvm)
 
-;;MS(C#,F#)
-;(require 'ms)
+;;MS(C#,F#,powershell)
+(require 'ms-settings)
 
 ;;golang
 (require 'golang-settings)
 
 ;;Rust
-;(require 'rust)
+(require 'rust-settings)
 
 ;;BEAM(Erlang,Elixir)
 (require 'beam-settings)
+
+;;Swift
+(require 'swift-settings)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

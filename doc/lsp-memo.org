@@ -68,7 +68,10 @@ terraform-mode
 - terraform-ls
 
 *** install
-
+#+begin_src 
+brew tap hashicorp/tap
+brew install hashicorp/tap/terraform-ls
+#+end_src
 ** ShellScript / bash / zsh
 sh-mode / bash-ts-mode
 
@@ -235,13 +238,19 @@ csharp-mode / csharp-ts-mode
 - csharp-ls
 
 *** install
-
+#+begin_src 
+# ※dotnet-sdkが既に入っている前提
+dotnet tool csharp-ls
+#+end_src
 ** F#
 
 - fsautocomplete (FSAC)
 
 *** install
-
+#+begin_src 
+# ※dotnet-sdkが既に入っている前提
+dotnet tool install --global fsautocomplete
+#+end_src
 ** Java
 java-mode / java-ts-mode
 
@@ -331,5 +340,5 @@ brew install elixir-ls
 *** install
 
 *** 補足
-Mac（Xcode）環境であれば、設定不要で最初からシステムに入っていることが多い
+Mac（Xcode）環境であれば、設定不要で最初からシステムに入っている
 
