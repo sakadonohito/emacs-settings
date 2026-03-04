@@ -4,6 +4,9 @@
 ;; 必要なパッケージのロードやカスタム設定が行われます。
 ;;; Code:
 
+;; --------------------------------------------------
+;; Go
+;; --------------------------------------------------
 (use-package go-ts-mode
   :mode (("\\.go\\'" . go-ts-mode)
          ("\\.mod\\'" . go-mod-ts-mode)
@@ -42,6 +45,30 @@
                                         (unusedparams . t)
                                         (unusedwrite . t))
                              :staticcheck t)))))
+
+;(use-package gotest
+;  :ensure t
+;  :bind (:map go-ts-mode-map
+;              ("C-c C-t t" . go-test-current-test)
+;              ("C-c C-t f" . go-test-current-file)
+;              ("C-c C-t p" . go-test-current-project)
+;              ("C-c C-t b" . go-test-current-benchmark)))
+
+
+;; --------------------------------------------------
+;; Toml
+;; --------------------------------------------------
+;; LSP入れるほどじゃないかな。。
+(use-package toml-ts-mode
+  :mode "\\.toml\\'"
+  :init
+  ;; 1. 起動時にTOML文法が利用可能かチェックして紐付け
+  (when (treesit-ready-p 'toml)
+    (add-to-list 'auto-mode-alist '("\\.toml\\'" . toml-ts-mode)))
+  :config
+  ;; インデント設定（通常は2か4）
+  (setq toml-ts-mode-indent-offset 2))
+
 
 
 (provide 'golang-settings)

@@ -204,6 +204,18 @@ PATHS: List of directory paths to add to `load-path`."
 ;; treesit用セットアップ
 ;; --------------------------------------------------
 
+;(require 'treesit)
+(use-package treesit
+  ;; パッケージではないので ensure は不要
+  :config
+  ;; ここに共通の文法ソースリストなどを書く
+  (setq treesit-font-lock-level 4)) ; ハイライトの精細度を最大に
+
+;; 念のため、rust の文法が利用可能かチェック
+;(when (treesit-ready-p 'rust)
+;  (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode)))
+
+
 ;; URLリスト
 (setq treesit-language-source-alist
       '(
@@ -276,6 +288,7 @@ PATHS: List of directory paths to add to `load-path`."
                   (error
                    (message "Tree-sitter install error (%s): %s"
                             (car lang) (error-message-string err))))))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

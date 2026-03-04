@@ -9,6 +9,11 @@
 (use-package ruby-ts-mode
   :ensure nil ; Emacs組み込み
   :init
+  ;; 1. 起動時に確実に紐付ける
+  (when (treesit-ready-p 'rust)
+    (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode)))
+  ;; 2. モード起動時に確実に eglot を呼ぶ (init内に書くのがコツ)
+  (add-hook 'rust-ts-mode-hook #'eglot-ensure)
   ;; 既存の ruby-mode を ruby-ts-mode にリマップ
   (add-to-list 'major-mode-remap-alist '(ruby-mode . ruby-ts-mode))
   :mode (("\\.rb\\'" . ruby-ts-mode)

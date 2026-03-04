@@ -213,6 +213,9 @@ rust-mode / rust-ts-mode
 - rust-analyzer
 
 *** install
+#+begin_src 
+rustup component add rust-analyzer
+#+end_src
 
 ** C言語 / C++
 c-mode / c++-mode
