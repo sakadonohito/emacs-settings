@@ -5,6 +5,7 @@
 ;;; Code:
 
 (use-package markdown-ts-mode
+  :after treesit
   :ensure nil
   :init
   ;; markdown-modeを呼び出そうとしてもts-modeに強制する
@@ -12,10 +13,12 @@
   :mode (("\\.md\\'" . markdown-ts-mode)
          ("\\.markdown\\'" . markdown-ts-mode)
          ("\\.mdx\\'" . markdown-ts-mode))
-  :bind (:map markdown-mode-map
-              ;("C-c M-p" . markdown-preview-mode)
-              ;:map markdown-ts-mode-map
+  :bind (:map markdown-ts-mode-map
               ("C-c M-p" . markdown-preview-mode))
+  ;:bind (:map markdown-mode-map
+  ;            ;("C-c M-p" . markdown-preview-mode)
+  ;            ;:map markdown-ts-mode-map
+  ;            ("C-c M-p" . markdown-preview-mode))
   :hook
   (markdown-ts-mode . eglot-ensure)
   :custom
