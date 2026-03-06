@@ -24,7 +24,7 @@
         (vertical-scroll-bars . nil)     ;; 縦のスクロールバー消す
         (width . 100)                    ;; 幅100文字
         (height . 40)                    ;; 高さ40行
-        (alpha . 70)                     ;; 全体を透過に※CUIはターミナル依存
+        (alpha . 80)                     ;; 全体を透過に※CUIはターミナル依存
         ;(alpha-background . 70)          ;; 私の環境ではこっちの設定が使えない！
         (font . "UDEV Gothic 35NF-20")   ;; フォントを「UDEV Gothic 35NF」に、サイズを200ptに
         (internal-border-width . 0)))    ;; ウィンドウの外枠とテキスト領域の間にある余白をゼロにする

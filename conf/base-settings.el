@@ -103,7 +103,8 @@
 ;; ====================================================================
 
 ;; M-x customize-themes からGUI操作でテーマ変更できるよ
-(load-theme 'wheatgrass t) ;; GUI,CUI 共通
+;(load-theme 'wheatgrass t) ;; GUI,CUI 共通
+(load-theme 'tsdh-dark t) ;; GUI,CUI 共通
 
 ;; GUI,CUIでテーマを分けたい場合
 ;(if (display-graphic-p)  ;; GUI環境かどうかを判定
