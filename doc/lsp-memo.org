@@ -333,6 +333,17 @@ brew install elixir
 brew install elixir-ls
 #+end_src>
 
+** Zig
+
+- zls
+
+*** install
+#+begin_src 
+# zig と zls はバージョンを合わせる必要がある
+brew install zls
+#+end_src>
+
+
 ** Swift
 
 - sourcekit-lsp

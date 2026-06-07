@@ -418,6 +418,9 @@ PATHS: List of directory paths to add to `load-path`."
 ;;Rust
 (require 'rust-settings)
 
+;;Zig
+(require 'zig-settings)
+
 ;;BEAM(Erlang,Elixir)
 (require 'beam-settings)
 
