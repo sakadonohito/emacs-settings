@@ -21,20 +21,24 @@
   (python-shell-interpreter "python")
   (python-indent-offset 4)
   :config
+  ;; uvx を使えば、グローバルの Python や npm の PATH がどうなっていても、
+  ;; uv がその場で pyright を引っ張ってきて安全に起動してくれます。
   (with-eval-after-load 'eglot
     (add-to-list 'eglot-server-programs
-                 '((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))))
+                 '((python-mode python-ts-mode) . ("uvx" "pyright-langserver" "--stdio") ;; これやめた ("pyright-langserver" "--stdio")
+                   ))))
 
 ;; --------------------------------------------------
 ;; Python仮想環境 (pyenv/virtualenv) のサポート
 ;; --------------------------------------------------
-(use-package pyvenv
-  :ensure t
-  :config
-  (pyvenv-mode 1)
-  ;; pyenv の versions ディレクトリを WORKON_HOME として認識させると、
-  ;; M-x pyvenv-workon コマンドで pyenv の環境を一覧から選びやすくなります
-  (setenv "WORKON_HOME" (expand-file-name "~/.pyenv/versions")))
+;; uvを使うように変えたのでこの設定は不要
+;(use-package pyvenv
+;  :ensure t
+;  :config
+;  (pyvenv-mode 1)
+;  ;; pyenv の versions ディレクトリを WORKON_HOME として認識させると、
+;  ;; M-x pyvenv-workon コマンドで pyenv の環境を一覧から選びやすくなります
+;  (setenv "WORKON_HOME" (expand-file-name "~/.pyenv/versions")))
 
 ;; --------------------------------------------------
 ;; 自動フォーマッタ（Black）を有効化

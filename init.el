@@ -137,7 +137,7 @@ PATHS: List of directory paths to add to `load-path`."
   :ensure t
   :custom
   (exec-path-from-shell-check-startup-files nil)
-  (exec-path-from-shell-variables '("PATH" "GOPATH" "JAVA_HOME"))
+  (exec-path-from-shell-variables '("PATH" "GOPATH" "JAVA_HOME" "LLAMA_CLI_PATH" "LLAMA_SERVER_PATH" "GEMME4_E4B" "QWEN2_5_7B" "QWEN2_5_CODER_7B" "QWEN2_5_CODER_3B"))
   (exec-path-from-shell-arguments '("-l"))
   :config
   (exec-path-from-shell-initialize))
@@ -252,15 +252,13 @@ PATHS: List of directory paths to add to `load-path`."
 
         ;; --- 関数型・その他 ---
         (clojure    "https://github.com/sogaiu/tree-sitter-clojure")
-        (fsharp "https://github.com/KaranAhlawat/tree-sitter-fsharp")
+        ;(fsharp "https://github.com/KaranAhlawat/tree-sitter-fsharp")  ;; fsharp-ts-mode が自動インストールする
         (erlang     "https://github.com/WhatsApp/tree-sitter-erlang")
         (elixir     "https://github.com/elixir-lang/tree-sitter-elixir")
         (heex   "https://github.com/phoenixframework/tree-sitter-heex") ;; ElixirのHTMLテンプレート
         (make   "https://github.com/alemuller/tree-sitter-make")        ;; ???makefile用???
         ;; swift用はまだない
         ;(swift      "")
-        ;; F#はts-modeがまだ不完全？
-        ;(fsharp     "https://github.com/KaranAhlawat/tree-sitter-fsharp")
 
         ;; --- Windows系 ---
         ;; powershell用はまだない?

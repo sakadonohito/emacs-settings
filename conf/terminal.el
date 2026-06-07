@@ -101,6 +101,14 @@
               (display-line-numbers-mode -1) ;; 行番号を非表示
               (setq-local cursor-type 'bar)  ;; barカーソルにする
               ))
+
+  ;; ---------------------------------------------------------
+  ;; ⑤ 【追加】C-h（delete-backward-char）のコンフリクト対策
+  ;; ---------------------------------------------------------
+  ;; eatの各入力モードのキーマップにおいて、C-hを「シェルへのバックスペース送信」に上書きします
+  (define-key eat-semi-char-mode-map (kbd "C-h") (lambda () (interactive) (eat-self-input 1 ?\C-h)))
+  ;(define-key eat-semi-char-mode-map (kbd "C-h") 'eat-send-password-backspace)
+  ;(define-key eat-char-mode-map (kbd "C-h") 'eat-send-password-backspace)
 )
 
 (provide 'terminal)

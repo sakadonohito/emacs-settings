@@ -4,6 +4,8 @@
 ;; 必要なパッケージのロードやカスタム設定が行われます。
 ;;; Code:
 
+;; 重要！： dotnet tools のパス(~/.dotnet/tools) を環境変数に追加してください。
+
 ;; --------------------------------------------------
 ;; C#の設定
 ;; --------------------------------------------------
@@ -39,53 +41,64 @@
 ;; --------------------------------------------------
 ;; F#の設定
 ;; --------------------------------------------------
-;(use-package fsharp-ts-mode
-;  :after treesit
-;  :vc (:url "https://github.com/KaranAhlawat/fsharp-ts-mode" :rev :newest)
-;  :mode (("\\.fs\\'" . fsharp-ts-mode)
-;         ("\\.fsx\\'" . fsharp-ts-mode)
-;         ("\\.fsi\\'" . fsharp-ts-mode))
-;  :init
-;  ;(add-to-list 'auto-mode-alist '("\\.fs\\'" . fsharp-ts-mode))
-;  (add-to-list 'major-mode-remap-alist '(fsharp-mode . fsharp-ts-mode))
-;  :hook (fsharp-ts-mode . eglot-ensure)  ;; LSPサーバーを有効化
-;  :custom ((fsharp-indent-offset 4)   ;; インデント幅を4に設定
-;           ;(tab-width 4)            ;; タブ幅を4に設定
-;           ;(indent-tabs-mode nil)
-;)  ;; タブをスペースに変換
-;  :config
-;  ;; 1. インデントエンジンの強制設定
-;  (setq-local indent-line-function 'indent-relative) ; 前の行に合わせる最も安全な設定
-;  (setq fsharp-ts-mode-indent-offset 4)
-;  (with-eval-after-load 'eglot
-;    (add-to-list 'eglot-server-programs
-;                 ;'(fsharp-ts-mode . ("fsautocomplete" "--background-service-enabled"))))
-;                 '(fsharp-ts-mode . ("fsautocomplete"))))
-;  (message "fsharp setup finished"))
-
-(use-package fsharp-mode
+;; 初めてF#ファイルを開いた時に以下を実行
+;; M-x fsharp-ts-mode-install-grammars
+;; --------------------------------------------------
+(use-package fsharp-ts-mode
   :after treesit
   :ensure t
-  ;:vc (:url "https://github.com/KaranAhlawat/fsharp-ts-mode" :rev :newest)
-  :mode (("\\.fs\\'" . fsharp-mode)
-         ("\\.fsx\\'" . fsharp-mode)
-         ("\\.fsi\\'" . fsharp-mode))
-  ;:init
-  ;(add-to-list 'auto-mode-alist '("\\.fs\\'" . fsharp-mode))
-  ;(add-to-list 'major-mode-remap-alist '(fsharp-mode . fsharp-mode))
-  :hook (fsharp-mode . eglot-ensure)  ;; LSPサーバーを有効化
-  :custom ((fsharp-indent-offset 4)   ;; インデント幅を4に設定
-           ;(tab-width 4)            ;; タブ幅を4に設定
-           ;(indent-tabs-mode nil)    ;; タブをスペースに変換
-           )
+  :init
+  (add-to-list 'major-mode-remap-alist '(fsharp-mode . fsharp-ts-mode))
+  :mode (("\\.fs\\'" . fsharp-ts-mode)
+         ("\\.fsx\\'" . fsharp-ts-mode)
+         ("\\.fsi\\'" . fsharp-ts-mode))
+  :hook (
+         (fsharp-ts-mode . fsharp-ts-repl-minor-mode)
+         (fsharp-ts-mode . fsharp-ts-dotnet-mode)
+         (fsharp-ts-mode . prettify-symbols-mode)
+         (fsharp-ts-mode . eglot-ensure)              ;; LSPサーバーを有効化
+         (fsharp-ts-mode . (lambda ()
+                             (setq-local corfu-auto-prefix 2)
+                             (setq-local completion-styles '(basic partial-completion))
+                             ;; Cape の補完ソースをF#バッファ用に上書き
+;                             (setq-local completion-at-point-functions
+;                                         (list
+;                                          #'eglot-completion-at-point  ;; LSP補完を最優先
+;                                          #'cape-keyword               ;; キーワード補完
+;                                          #'cape-dabbrev               ;; バッファ内単語
+;                                          ))
+))
+         )
+  :custom ((tab-width 4)                              ;; タブ幅を4に設定
+           (indent-tabs-mode nil))                    ;; タブをスペースに変換
   :config
-  ;(setq-local indent-line-function 'indent-relative) ; 前の行に合わせる最も安全な設定
-  ;(setq fsharp-mode-indent-offset 4)
-  (with-eval-after-load 'eglot
+  ;; fsharp-ts-eglot の自動インストールを使わず
+  ;; dotnet グローバルツールを使う
+  (setq fsharp-ts-eglot-server-install-dir nil)
+  (require 'fsharp-ts-eglot)
+  (require 'fsharp-ts-lens)
+  (require 'fsharp-ts-info)
+  (add-hook 'fsharp-ts-mode-hook #'fsharp-ts-lens-mode)
+  (add-hook 'fsharp-ts-mode-hook #'fsharp-ts-info-mode)
+  (setq fsharp-ts-guess-indent-offset t)
+  ;; fsharp-ts-eglot のバグ対処：
+  ;; server-contact が引数なしで定義されているが
+  ;; Eglot は引数ありで呼び出すためラッパーで吸収
+  ;; fsharp-ts-eglot--server-contact の引数なし定義を修正するラッパー
+  (with-eval-after-load 'fsharp-ts-eglot
+    (defun fsharp-ts-eglot--server-contact (&rest _)
+      "Wrapper to accept arguments Eglot passes."
+      (fsharp-ts-eglot--ensure-server)
+      (fsharp-ts-eglot--server-command))
+    ;; eglot-server-programs を上書き登録
     (add-to-list 'eglot-server-programs
-                 ;'(fsharp-mode . ("fsautocomplete" "--background-service-enabled"))))
-                 '(fsharp-mode . ("fsautocomplete"))))
-  )
+                 '((fsharp-ts-mode fsharp-ts-signature-mode) .
+                   (fsharp-ts-eglot-server . fsharp-ts-eglot--server-contact))))
+  (message "fsharp setup finished"))
+
+(with-eval-after-load 'project
+  (add-to-list 'project-vc-extra-root-markers "*.sln")
+  (add-to-list 'project-vc-extra-root-markers "global.json"))
 
 ;; --------------------------------------------------
 ;; PowerShellの設定(いけるか？)
