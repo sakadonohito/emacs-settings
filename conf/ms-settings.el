@@ -55,7 +55,7 @@
   :hook (
          (fsharp-ts-mode . fsharp-ts-repl-minor-mode)
          (fsharp-ts-mode . fsharp-ts-dotnet-mode)
-         (fsharp-ts-mode . prettify-symbols-mode)
+         (fsharp-ts-mode . prettify-symbols-mode)     ;; 数学記法表示(funがλ、<-が←、->が→)に変換してくれるhook
          (fsharp-ts-mode . eglot-ensure)              ;; LSPサーバーを有効化
          (fsharp-ts-mode . (lambda ()
                              (setq-local corfu-auto-prefix 2)
