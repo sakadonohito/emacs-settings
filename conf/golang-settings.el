@@ -21,6 +21,8 @@
   ;                (add-hook 'before-save-hook #'eglot-format-buffer nil t)))
   :config
   ;; Go の標準インデント（タブ幅8が公式標準だが、表示上の幅を4にするのが一般的）
+  ;; →【修正・追加】go-ts-mode のインデント幅を 4 に設定
+  (setq go-ts-mode-indent-offset 4) ;; 半角スペース4つ分
   (setq-default tab-width 4)
   (setq-default indent-tabs-mode t) ; Goはタブインデントが絶対ルール
 

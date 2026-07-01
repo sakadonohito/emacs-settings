@@ -59,6 +59,9 @@
          (fsharp-ts-mode . eglot-ensure)              ;; LSPサーバーを有効化
          (fsharp-ts-mode . (lambda ()
                              (setq-local corfu-auto-prefix 2)
+                             (setq-local corfu-auto nil)          ;; 自動発火を無効化
+                             (setq-local tab-always-indent 'complete) ;; インデント済みならTABで補完
+                             (setq-local corfu-auto-delay 0.5) ;; 少し遅くする
                              (setq-local completion-styles '(basic partial-completion))
                              ;; Cape の補完ソースをF#バッファ用に上書き
 ;                             (setq-local completion-at-point-functions
